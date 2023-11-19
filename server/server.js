@@ -1,7 +1,6 @@
 const http = require("http");
 const { Server } = require("socket.io");
-// const express = require('express');
-// const app = express();
+
 const httpServer = http.createServer();
 
 const io = new Server(httpServer, {
@@ -14,8 +13,20 @@ const io = new Server(httpServer, {
 });
 
 io.on("connection", (socket) => {
-  console.log(`User: ${socket.id} connected`);
+  // const staticUserid12312 = roomsIdGenerate();
+  socket.on('connect', () => {
+    socket.emit('setClientId', clientId);
+  });
 
+  socket.on('setClientId', (clientId) => {
+    console.log(`Client connected with ID: ${clientId}`);
+    socket.id = clientId;
+    // Do something with clientId...
+  });
+  console.log(socket.id); // old ID
+  console.log(socket.id);
+
+  console.log(`User: ${socket.id} connected`);
   // Obsługa stworzenia i dołączenia do pokoju
   socket.on("createRoom", (roomName) => {
     socket.join(roomName);
@@ -30,8 +41,8 @@ io.on("connection", (socket) => {
     io.emit(`id`, `${socket.id.substring(0, 5)}`);
   });
 
-  socket.on('disconnect', () => {
-    console.log('Klient odłączony:', socket.id);
+  socket.on("disconnect", () => {
+    console.log("Klient odłączony:", socket.id);
   });
 });
 
