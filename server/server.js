@@ -1,5 +1,6 @@
 const http = require("http");
 const { Server } = require("socket.io");
+const { join } = require("node:path");
 
 const httpServer = http.createServer();
 const { createClient } = require("@supabase/supabase-js");
@@ -19,6 +20,7 @@ const io = new Server(httpServer, {
         ? false
         : ["http://localhost:5500", "http://127.0.0.1:5500"],
   },
+  connectionStateRecovery: {},
 });
 
 io.on("connection", (socket) => {
@@ -40,11 +42,71 @@ io.on("connection", (socket) => {
   //     );
   //   });
 
-  // funkcja pobierąca mail z login-page
+  //funkcja wsatwiająca email i hasło do bazy
+  // Funkcja sprawdzająca, czy email już istnieje w bazie danych
+  async function sprawdzDaneLogowania(email, password) {
+    try {
+      const { data, error } = await supabase
+        .from("clients")
+        .select("*")
+        .eq("email", email)
+        .eq("password", password);
 
-  socket.on("getUserLoginInfo", (email, password) => {
+      if (error) {
+        throw error;
+      }
+      return data.length > 0; // Zwraca true, jeśli dane logowania są poprawne, w przeciwnym razie false
+    } catch (error) {
+      console.error(
+        "Błąd podczas sprawdzania danych logowania w bazie danych:",
+        error.message
+      );
+      return false; // Zakładamy, że wystąpił błąd, więc nie chcemy potwierdzić prawidłowych danych logowania
+    }
+  }
+
+  // Funkcja dodająca nowy wiersz do tabeli "clients"
+  async function dodajNowyWiersz(email, password) {
+    try {
+      // Sprawdź, czy email już istnieje w bazie danych
+      const emailIstnieje = await sprawdzEmail(email);
+
+      if (emailIstnieje) {
+        console.error(
+          "Email już istnieje w bazie danych. Nie dodano nowego wiersza."
+        );
+        return;
+      }
+
+      // Dodaj nowy wiersz do tabeli "clients"
+      const { data, error } = await supabase.from("clients").insert([
+        {
+          email: email,
+          password: password,
+        },
+      ]);
+
+      if (error) {
+        throw error;
+      }
+
+      console.log("Dodano nowy wiersz:", data);
+    } catch (error) {
+      console.error("Błąd podczas dodawania nowego wiersza:", error.message);
+    }
+  }
+
+  // funkcja pobierająca mail z login-page
+  socket.on("getUserLoginInfo", (email, password, type) => {
     console.log(`Client mail: ${email}`);
     console.log(`Client password: ${password}`);
+    if (type == "signin") {
+      dodajNowyWiersz(email, password);
+      console.log(type);
+    } else if (type == "login") {
+      sprawdzDaneLogowania(email, password);
+      console.log(type);
+    }
   });
 
   //socket io
