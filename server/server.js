@@ -11,7 +11,30 @@ const supabaseKey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwaW9ibWZjam9udG52bXZrcnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDA5MTQyODEsImV4cCI6MjAxNjQ5MDI4MX0.5JcyQimgLc0EmirbcpiqDmO3hMAimMrWR1KoEVDWQWM";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Przykład pobierania danych z bazy danych
+let rooms = [];
+let roomsAttributes = {};
+async function generateUniqueRoomName() {
+  const adjectives = ["Red", "Blue", "Green", "Yellow", "Purple", "Orange"];
+  const nouns = ["Lion", "Tiger", "Bear", "Elephant", "Giraffe", "Zebra"];
+
+  let uniqueRoomName = "";
+
+  do {
+    const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+    const noun = nouns[Math.floor(Math.random() * nouns.length)];
+
+    uniqueRoomName = `${adjective}-${noun}`;
+
+    // Sprawdź, czy nazwa pokoju jest unikalna
+    if (!rooms.includes(uniqueRoomName)) {
+      // Jeżeli jest unikalna, dodaj ją do tablicy i zwróć nazwę
+      rooms.push(uniqueRoomName);
+      return uniqueRoomName;
+    }
+
+    // Jeżeli nazwa już istnieje, ponów próbę generacji
+  } while (true);
+}
 
 const io = new Server(httpServer, {
   cors: {
@@ -21,125 +44,63 @@ const io = new Server(httpServer, {
         : ["http://localhost:5500", "http://127.0.0.1:5500"],
   },
   connectionStateRecovery: {},
+  maxDisconnectionDuration: 2 * 60 * 1000,
+  skipMiddlewares: true,
 });
-
 io.on("connection", (socket) => {
-  // Przykład pobierania danych z bazy danych
-  // supabase
-  //   .from("clients")
-  //   .select("*")
-  //   .then(({ data, error }) => {
-  //     if (error) {
-  //       throw error;
-  //     }
-  //     socket.emit("clientsData", data);
-  //     console.log(data, "test");
-  //   })
-  //   .catch((error) => {
-  //     console.error(
-  //       "Błąd podczas pobierania danych z bazy danych:",
-  //       error.message
-  //     );
-  //   });
-
-  //funkcja wsatwiająca email i hasło do bazy
-  // Funkcja sprawdzająca, czy email już istnieje w bazie danych
-  async function sprawdzDaneLogowania(email, password) {
-    try {
-      const { data, error } = await supabase
-        .from("clients")
-        .select("*")
-        .eq("email", email)
-        .eq("password", password);
-
-      if (error) {
-        throw error;
-      }
-      return data.length > 0; // Zwraca true, jeśli dane logowania są poprawne, w przeciwnym razie false
-    } catch (error) {
-      console.error(
-        "Błąd podczas sprawdzania danych logowania w bazie danych:",
-        error.message
-      );
-      return false; // Zakładamy, że wystąpił błąd, więc nie chcemy potwierdzić prawidłowych danych logowania
-    }
-  }
-
-  // Funkcja dodająca nowy wiersz do tabeli "clients"
-  async function dodajNowyWiersz(email, password) {
-    try {
-      // Sprawdź, czy email już istnieje w bazie danych
-      const emailIstnieje = await sprawdzEmail(email);
-
-      if (emailIstnieje) {
-        console.error(
-          "Email już istnieje w bazie danych. Nie dodano nowego wiersza."
-        );
-        return;
-      }
-
-      // Dodaj nowy wiersz do tabeli "clients"
-      const { data, error } = await supabase.from("clients").insert([
-        {
-          email: email,
-          password: password,
-        },
-      ]);
-
-      if (error) {
-        throw error;
-      }
-
-      console.log("Dodano nowy wiersz:", data);
-    } catch (error) {
-      console.error("Błąd podczas dodawania nowego wiersza:", error.message);
-    }
-  }
-
-  // funkcja pobierająca mail z login-page
-  socket.on("getUserLoginInfo", (email, password, type) => {
-    console.log(`Client mail: ${email}`);
-    console.log(`Client password: ${password}`);
-    if (type == "signin") {
-      dodajNowyWiersz(email, password);
-      console.log(type);
-    } else if (type == "login") {
-      sprawdzDaneLogowania(email, password);
-      console.log(type);
-    }
-  });
-
-  //socket io
-  // const staticUserid12312 = roomsIdGenerate();
-  socket.on("connect", () => {
-    socket.emit("setClientId", clientId);
-  });
-
-  // socket.on("setClientId", (clientId) => {
-  //   console.log(`Client connected with ID: ${clientId}`);
-  //   socket.id = clientId;
-  //   // Do something with clientId...
-  //   console.log(socket.id);
-  // });
-
   console.log(`User: ${socket.id} connected`);
-  // Obsługa stworzenia i dołączenia do pokoju
-  socket.on("createRoom", (roomName) => {
-    socket.join(roomName);
-    console.log(
-      `Klient ${socket.id} stworzył/połączył się z pokojem: ${roomName}`
-    );
+
+  socket.on("createRoom", async () => {
+    const roomWithOnePerson = findRoomWithOccupancy(1);
+
+    if (roomWithOnePerson) {
+      // Jeżeli jest pokój z jedną osobą, dołącz do niego i zaktualizuj dane
+      socket.join(roomWithOnePerson);
+      updateOccupancy(roomWithOnePerson, 2);
+      console.log(`Klient ${socket.id} dołączył do: ${roomWithOnePerson}`);
+      io.to(roomWithOnePerson).emit("personAmout", "1");
+      io.to(roomWithOnePerson).emit("roomId", roomWithOnePerson);
+    } else {
+      // Jeżeli nie ma pokoju z jedną osobą lub są już dwa klienty w pokoju
+      const generatedRoomName = await generateUniqueRoomName();
+
+      if (generatedRoomName) {
+        // Jeżeli udało się wygenerować unikalną nazwę pokoju, dodaj do roomsAttributes
+        addRoomToAttributes(generatedRoomName, 1);
+        socket.join(generatedRoomName);
+        console.log(
+          `Klient ${socket.id} stworzył/połączył się z pokojem: ${generatedRoomName}`
+        );
+        io.to(generatedRoomName).emit("personAmout", "2");
+        io.to(generatedRoomName).emit("roomId", generatedRoomName);
+      }
+    }
   });
 
-  socket.on("message", (data) => {
-    console.log(socket.id, data);
-    io.emit(`message`, `${socket.id.substring(0, 5)}: ${data}`);
-    io.emit(`id`, `${socket.id.substring(0, 5)}`);
+  socket.on("move", ({ cellIndex, player, gameRoomId }) => {
+    console.log(cellIndex, player, gameRoomId);
+    io.to(gameRoomId).emit("opponentMove", { cellIndex, player });
   });
 
-  socket.on("disconnect", () => {
-    console.log("Klient odłączony:", socket.id);
-  });
+  // Dodaj funkcję, która znajduje pokój z określoną ilością osób
+  function findRoomWithOccupancy(occupancy) {
+    for (const roomName in roomsAttributes) {
+      if (roomsAttributes[roomName].occupancy === occupancy) {
+        return roomName;
+      }
+    }
+    return null;
+  }
+
+  // Dodaj funkcję, która aktualizuje ilość osób w danym pokoju
+  function updateOccupancy(roomName, newOccupancy) {
+    roomsAttributes[roomName].occupancy = newOccupancy;
+  }
+
+  // Dodaj funkcję, która dodaje pokój do roomsAttributes
+  function addRoomToAttributes(roomName, occupancy) {
+    roomsAttributes[roomName] = { occupancy };
+  }
 });
 
 httpServer.listen(3500, () => {
