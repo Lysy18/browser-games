@@ -13,6 +13,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 let rooms = [];
 let roomsAttributes = {};
+let lastUserMove;
 async function generateUniqueRoomName() {
   const adjectives = ["Red", "Blue", "Green", "Yellow", "Purple", "Orange"];
   const nouns = ["Lion", "Tiger", "Bear", "Elephant", "Giraffe", "Zebra"];
@@ -56,9 +57,9 @@ io.on("connection", (socket) => {
     if (roomWithOnePerson) {
       // Jeżeli jest pokój z jedną osobą, dołącz do niego i zaktualizuj dane
       socket.join(roomWithOnePerson);
-      updateOccupancy(roomWithOnePerson, 2);
       console.log(`Klient ${socket.id} dołączył do: ${roomWithOnePerson}`);
-      io.to(roomWithOnePerson).emit("personAmout", "1");
+      io.to(roomWithOnePerson).emit("personAmout", "2");
+      io.to(roomWithOnePerson).emit("gameStart", "start");
       io.to(roomWithOnePerson).emit("roomId", roomWithOnePerson);
     } else {
       // Jeżeli nie ma pokoju z jedną osobą lub są już dwa klienty w pokoju
@@ -71,15 +72,25 @@ io.on("connection", (socket) => {
         console.log(
           `Klient ${socket.id} stworzył/połączył się z pokojem: ${generatedRoomName}`
         );
-        io.to(generatedRoomName).emit("personAmout", "2");
+        io.to(generatedRoomName).emit("personAmout", "1");
         io.to(generatedRoomName).emit("roomId", generatedRoomName);
+        lastUserMove = socket.id;
+        console.log(lastUserMove, "lastUserMove");
+        io.to(generatedRoomName).emit("userMove", lastUserMove);
       }
     }
   });
 
-  socket.on("move", ({ cellIndex, player, gameRoomId }) => {
-    console.log(cellIndex, player, gameRoomId);
-    io.to(gameRoomId).emit("opponentMove", { cellIndex, player });
+  socket.on("move", ({ cellIndex, player, gameRoomId, userId }) => {
+    console.log(cellIndex, player, gameRoomId, userId);
+    lastUserMove = userId;
+    console.log(lastUserMove, "lastUserMoveAfetrMove");
+    io.to(gameRoomId).emit("opponentMove", { cellIndex, player, lastUserMove });
+    // io.to(roomWithOnePerson).emit("userMove", "your oponent");
+    console.log(roomsAttributes);
+  });
+  socket.on("secondUserJoined", (userAmount) => {
+    console.log("2 graczy !!!");
   });
 
   // Dodaj funkcję, która znajduje pokój z określoną ilością osób

@@ -15,7 +15,17 @@ body {
 .pageContainer {
   display: flex;
 }
-.pageContainer .game-container {
+.pageContainer .startBtnContainer-startBtn {
+  width: 200px;
+  height: 160px;
+}
+.pageContainer .waitingRoom {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+}
+.pageContainer .game-container-board {
   display: grid;
   grid-template-columns: repeat(3, 100px);
   grid-gap: 5px;
