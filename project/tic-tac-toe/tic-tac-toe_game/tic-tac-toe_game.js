@@ -49,6 +49,7 @@ socket.on("personAmout", (receivedPersonAmout) => {
   if (receivedPersonAmout == 2) {
     gameContainer.classList.remove("hidden");
     btnStartGame.classList.add("hidden");
+    nextMove.classList.remove("hidden");
     console.log("test2");
     // socket.emit("secondUserJoined", receivedPersonAmout);
     personAmout = "2";
@@ -59,6 +60,7 @@ socket.on("gameStart", (message) => {
   console.log(`gameStart: ${message}`);
   if (!waitingRoom.classList.contains("hidden")) {
     waitingRoom.classList.add("hidden");
+    nextMove.classList.remove("hidden");
   }
 });
 

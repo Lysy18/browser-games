@@ -57,6 +57,7 @@ io.on("connection", (socket) => {
     if (roomWithOnePerson) {
       // Jeżeli jest pokój z jedną osobą, dołącz do niego i zaktualizuj dane
       socket.join(roomWithOnePerson);
+      updateOccupancy(roomWithOnePerson, 2);
       console.log(`Klient ${socket.id} dołączył do: ${roomWithOnePerson}`);
       io.to(roomWithOnePerson).emit("personAmout", "2");
       io.to(roomWithOnePerson).emit("gameStart", "start");
@@ -96,6 +97,7 @@ io.on("connection", (socket) => {
   // Dodaj funkcję, która znajduje pokój z określoną ilością osób
   function findRoomWithOccupancy(occupancy) {
     for (const roomName in roomsAttributes) {
+      console.log(roomName);
       if (roomsAttributes[roomName].occupancy === occupancy) {
         return roomName;
       }
