@@ -4,19 +4,18 @@ let btnStartGame = document.querySelector(".startBtn-js");
 let gameContainer = document.querySelector(".game-container-js");
 let waitingRoom = document.querySelector(".waitingRoom-js");
 let nextMove = document.querySelector(".nextMove-js");
-
+let gameResult = document.querySelector(".gameResult-js");
+let gameResultLose = document.querySelector(".gameResultLose-js");
+let gameResultDraw = document.querySelector(".gameResultDraw-js");
+let gameResultWon = document.querySelector(".gameResultWon-js");
 const createRoomFun = () => {
   socket.emit("createRoom", "tak");
   socket.on("personAmout", (receivedPersonAmout) => {
-    console.log(`receivedPersonAmout: ${receivedPersonAmout}`);
-
     if (receivedPersonAmout == 1) {
       if (!btnStartGame.classList.contains("hidden")) {
         btnStartGame.classList.add("hidden");
         waitingRoom.classList.remove("hidden");
-        console.log("1!!!!!!!!!!!!!!!!!!!!!!!!");
         gameContainer.classList.remove("hidden");
-        nextMove.innerText = "Twój ruch";
       }
     }
 
@@ -30,12 +29,12 @@ let roomId = [];
 
 socket.on("roomId", (receivedRoomId) => {
   roomId.push(receivedRoomId);
-  console.log(`Room ID received: ${roomId}`);
+  `Room ID received: ${roomId}`;
   // Tutaj możesz wykonywać inne działania związane z otrzymanym ID pokoju
 });
 socket.on("userMove", (userId) => {
-  if (userId == socket.id) {
-    nextMove.innerText = "Twój ruch";
+  if (userId != socket.id) {
+    nextMove.innerText = "Twój ruch!";
   }
 });
 
@@ -45,19 +44,15 @@ let moveHistory = [];
 
 let personAmout;
 socket.on("personAmout", (receivedPersonAmout) => {
-  console.log(`receivedPersonAmout: ${receivedPersonAmout}`);
   if (receivedPersonAmout == 2) {
     gameContainer.classList.remove("hidden");
     btnStartGame.classList.add("hidden");
     nextMove.classList.remove("hidden");
-    console.log("test2");
-    // socket.emit("secondUserJoined", receivedPersonAmout);
     personAmout = "2";
   }
 });
 
 socket.on("gameStart", (message) => {
-  console.log(`gameStart: ${message}`);
   if (!waitingRoom.classList.contains("hidden")) {
     waitingRoom.classList.add("hidden");
     nextMove.classList.remove("hidden");
@@ -69,62 +64,71 @@ const board = Array.from(Array(3), () => Array(3).fill(""));
 let test = document.querySelector(".test");
 // Funkcja obsługująca kliknięcie w komórkę
 function handleCellClick(event) {
-  if (moveHistory.length == 0) {
-    currentPlayer = "X";
-    moveHistory.unshift(currentPlayer);
-  } else {
-    if (moveHistory[0] == "X") {
-      currentPlayer = "0";
-      moveHistory.unshift(currentPlayer);
-      console.log(moveHistory);
-    } else {
+  if (nextMove.innerText == "Twój ruch!") {
+    if (moveHistory.length == 0) {
       currentPlayer = "X";
       moveHistory.unshift(currentPlayer);
-      console.log(moveHistory);
+    } else {
+      if (moveHistory[0] == "X") {
+        currentPlayer = "0";
+        moveHistory.unshift(currentPlayer);
+      } else {
+        currentPlayer = "X";
+        moveHistory.unshift(currentPlayer);
+      }
     }
-  }
-  nextMove.innerText = "Poczekaj na ruch twojego przeciwnika";
+    nextMove.innerText = "Poczekaj na ruch twojego przeciwnika";
 
-  // if (nextMove.innerText == "Twój ruch") {
-  //   console.log("1Move");
-  // } else if ((nextMove.innerText = "Poczekaj na ruch twojego przeciwnika")) {
-  //   nextMove.innerText = "Twój ruch";
-  //   console.log("2Move");
-  // }
-
-  // currentPlayer = currentPlayer === "X" ? "O" : "X";
-  // currentPlayer = currentPlayer === "X" ? "O" : "X";
-
-  const cellIndex = event.target.dataset.index;
-  console.log(roomId[0]);
-  let gameRoomId = roomId[0];
-  // Sprawdź, czy komórka jest pusta
-  if (board[Math.floor(cellIndex / 3)][cellIndex % 3] === "") {
-    // Zaktualizuj planszę i wyślij informację o ruchu do serwera
-    board[Math.floor(cellIndex / 3)][cellIndex % 3] = currentPlayer;
-    console.log(socket.id);
-    const userId = socket.id;
-    socket.emit("move", {
-      cellIndex,
-      player: currentPlayer,
-      gameRoomId,
-      userId,
-    });
-
-    // Zaktualizuj interfejs gracza
-    event.target.textContent = currentPlayer;
-
-    // Sprawdź, czy jest zwycięzca
-    // if (checkWinner()) {
-    //   // alert(`Gracz ${currentPlayer} wygrywa!`);
-    //   // resetGame();
-    // } else if (isBoardFull()) {
-    //   // Sprawdź, czy plansza jest pełna (remis)
-    //   // alert("Remis!");
-    //   // resetGame();
-    // } else {
-    //   // Zmień aktualnego gracza
+    // if (nextMove.innerText == "Twój ruch") {
+    //   console.log("1Move");
+    // } else if ((nextMove.innerText = "Poczekaj na ruch twojego przeciwnika")) {
+    //   nextMove.innerText = "Twój ruch";
+    //   console.log("2Move");
     // }
+
+    // currentPlayer = currentPlayer === "X" ? "O" : "X";
+    // currentPlayer = currentPlayer === "X" ? "O" : "X";
+
+    const cellIndex = event.target.dataset.index;
+    let gameRoomId = roomId[0];
+    // Sprawdź, czy komórka jest pusta
+    if (board[Math.floor(cellIndex / 3)][cellIndex % 3] === "") {
+      // Zaktualizuj planszę i wyślij informację o ruchu do serwera
+      board[Math.floor(cellIndex / 3)][cellIndex % 3] = currentPlayer;
+      const userId = socket.id;
+      socket.emit("move", {
+        cellIndex,
+        player: currentPlayer,
+        gameRoomId,
+        userId,
+      });
+
+      // Zaktualizuj interfejs gracza
+      event.target.textContent = currentPlayer;
+
+      // Sprawdź, czy jest zwycięzca
+      if (checkWinner()) {
+        socket.emit("playerResultGameEnd", {
+          gameRoomId: gameRoomId,
+          userId: userId,
+          result: "win",
+        });
+        gameResultWon.classList.remove("hidden");
+      } else if (isBoardFull()) {
+        socket.emit("playerResultGameEnd", {
+          gameRoomId: gameRoomId,
+          userId: userId,
+          result: "draw",
+        });
+
+        // Sprawdź, czy plansza jest pełna (remis)
+        // alert("Remis!");
+        // resetGame();
+      } else {
+        // Zmień aktualnego gracza
+      }
+    }
+  } else {
   }
 }
 
@@ -183,25 +187,18 @@ cells.forEach((cell) => cell.addEventListener("click", handleCellClick));
 socket.on("opponentMove", ({ cellIndex, player, lastUserMove }) => {
   // Zaktualizuj planszę i interfejs na podstawie otrzymanego ruchu przeciwnika
 
-  console.log(cellIndex, player, lastUserMove, "lastUserMove");
   board[Math.floor(cellIndex / 3)][cellIndex % 3] = player;
   cells[cellIndex].textContent = player;
   if (player == "X") {
     moveHistory.unshift(player);
-    console.log(moveHistory);
   } else {
     moveHistory.unshift(player);
-    console.log(moveHistory);
   }
 
-  console.log(socket.id, lastUserMove);
-
   if (lastUserMove == socket.id) {
-    console.log("wykonałeś ruch");
     nextMove.innerText = "Poczekaj na ruch swojego przeciwnika";
   }
   if (lastUserMove != socket.id) {
-    console.log("twój ruch");
     nextMove.innerText = "Twój ruch!";
   }
 
@@ -216,4 +213,23 @@ socket.on("opponentMove", ({ cellIndex, player, lastUserMove }) => {
   // } else {
   //   // Zmień aktualnego gracza
   // }
+});
+
+//obsługa końca gry u opponenta
+socket.on("secondPlayerResult", (data) => {
+  let gameRoomId = data.gameRoomId;
+  let winnerUserId = data.userId;
+  let result = data.result;
+  console.log(gameRoomId, winnerUserId, result);
+  if (gameResult.classList.contains("hidden")) {
+    gameResult.classList.remove("hidden");
+  }
+
+  if (result == "draw") {
+    gameResultDraw.classList.remove("hidden");
+  } else if (result == "win") {
+    if (winnerUserId != socket.id) {
+      gameResultLose.classList.remove("hidden");
+    }
+  }
 });

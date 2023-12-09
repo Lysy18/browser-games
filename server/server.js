@@ -61,7 +61,10 @@ io.on("connection", (socket) => {
       console.log(`Klient ${socket.id} dołączył do: ${roomWithOnePerson}`);
       io.to(roomWithOnePerson).emit("personAmout", "2");
       io.to(roomWithOnePerson).emit("gameStart", "start");
+
       io.to(roomWithOnePerson).emit("roomId", roomWithOnePerson);
+      lastUserMove = socket.id;
+      io.to(roomWithOnePerson).emit("userMove", lastUserMove);
     } else {
       // Jeżeli nie ma pokoju z jedną osobą lub są już dwa klienty w pokoju
       const generatedRoomName = await generateUniqueRoomName();
@@ -75,29 +78,47 @@ io.on("connection", (socket) => {
         );
         io.to(generatedRoomName).emit("personAmout", "1");
         io.to(generatedRoomName).emit("roomId", generatedRoomName);
-        lastUserMove = socket.id;
-        console.log(lastUserMove, "lastUserMove");
-        io.to(generatedRoomName).emit("userMove", lastUserMove);
       }
     }
   });
 
   socket.on("move", ({ cellIndex, player, gameRoomId, userId }) => {
+    console.log("______________DUPA_____________________");
+    console.log(lastUserMove, socket.id);
+    if (lastUserMove == socket.id) {
+      console.log("duplikujesz ruch");
+    } else {
+      console.log("good move broooo");
+      lastUserMove = userId;
+      io.to(gameRoomId).emit("opponentMove", {
+        cellIndex,
+        player,
+        lastUserMove,
+      });
+      // io.to(roomWithOnePerson).emit("userMove", "your oponent");
+    }
     console.log(cellIndex, player, gameRoomId, userId);
-    lastUserMove = userId;
-    console.log(lastUserMove, "lastUserMoveAfetrMove");
-    io.to(gameRoomId).emit("opponentMove", { cellIndex, player, lastUserMove });
-    // io.to(roomWithOnePerson).emit("userMove", "your oponent");
-    console.log(roomsAttributes);
   });
-  socket.on("secondUserJoined", (userAmount) => {
-    console.log("2 graczy !!!");
+
+  socket.on("playerResultGameEnd", (data) => {
+    console.log("Otrzymane dane od klienta:", data);
+    let gameRoomId = data.gameRoomId;
+    let userId = data.userId;
+    let result = data.result;
+    // if (socket.id != userId) {
+    console.log(`${userId} Wygrał`, result, gameRoomId);
+    console.log(socket.id, userId);
+    if (result == "win") {
+      io.to(gameRoomId).emit("secondPlayerResult", data);
+    } else if (result == "draw") {
+      io.to(gameRoomId).emit("secondPlayerResult", data);
+    }
+    // }
   });
 
   // Dodaj funkcję, która znajduje pokój z określoną ilością osób
   function findRoomWithOccupancy(occupancy) {
     for (const roomName in roomsAttributes) {
-      console.log(roomName);
       if (roomsAttributes[roomName].occupancy === occupancy) {
         return roomName;
       }

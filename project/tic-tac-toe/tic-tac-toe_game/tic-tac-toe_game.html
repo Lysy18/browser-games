@@ -17,7 +17,6 @@
     <div class="pageContainer">
         <div class="startBtnContainer">
             <button class="startBtnContainer-startBtn startBtn-js">START</button>
-
         </div>
         <div class="pageBlocker hidden waitingRoom-js">
             <div class=" pageBlocker-waitingRoom ">
@@ -46,9 +45,22 @@
                 </div>
             </div>
         </div>
+        <div class="pageContainer-gameResult gameResult-js ">
+            <div class="pageContainer-gameResult-Lose hidden gameResultLose-js">You Lose</div>
+            <div class="pageContainer-gameResult-Draw hidden gameResultDraw-js">it's draw</div>
+            <div class="pageContainer-gameResult-Won  gameResultWon-js">
+                <div class="pageContainer-gameResult-Won-imgContainer">
+                    <img src="./../../img/youWon.png" alt="">
+                </div>
+                <div>
+                    <button>Zagraj jeszcze raz</button>
+                    <button>Zmień gre</button>
+                    <button>Nowy przeciwnik</button>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 <script src="tic-tac-toe_game.js"></script>
-<!-- <script src="./../../choose-game/script.js"></script> -->
 
 </html>

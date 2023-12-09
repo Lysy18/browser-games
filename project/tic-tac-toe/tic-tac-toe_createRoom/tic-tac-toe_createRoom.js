@@ -28,14 +28,11 @@ for (let i = 0; i < 10; i++) {
   // let aHfer = '<a href="#"></a>';
   ulList.insertAdjacentHTML("beforeend", aHfer);
   ulList.children[i].appendChild(liElement);
-  console.log(roomId);
 }
 document.addEventListener("click", function (e) {
   if (e.target.classList.contains("li-room")) {
-    console.log("Clicked element:", e.target);
     const roomName = e.target.getAttribute("data-id-room");
     // const roomName = "123";
     socket.emit("createRoom", roomName);
-    console.log(socket.id);
   }
 });
