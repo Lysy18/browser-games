@@ -45,22 +45,63 @@
                 </div>
             </div>
         </div>
-        <div class="pageContainer-gameResult gameResult-js ">
-            <div class="pageContainer-gameResult-Lose hidden gameResultLose-js">You Lose</div>
-            <div class="pageContainer-gameResult-Draw hidden gameResultDraw-js">it's draw</div>
-            <div class="pageContainer-gameResult-Won  gameResultWon-js">
+        <div class="pageContainer-gameResult gameResult-js hidden ">
+            <div class="pageContainer-gameResult-Lose hidden  gameResultLose-js">
+                <p>Przegrałeś</p>
+                <div class="pageContainer-gameResult-Lose-imgContainer">
+                    <img src="./../../img/youLost.png" alt="">
+                </div>
+                <div class="pageContainer-gameResult-Lose-btnContainer">
+                    <button
+                        class="pageContainer-gameResult-Lose-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn2 changeGame-js">Zmień
+                        gre</button>
+                    <button
+                        class="pageContainer-gameResult-Lose-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn1 playAgain-js">Zagraj
+                        ponownie
+                    </button>
+                    <button
+                        class="pageContainer-gameResult-Lose-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn3 newGame-js">Nowy
+                        przeciwnik</button>
+                </div>
+            </div>
+            <div class="pageContainer-gameResult-Draw  gameResultDraw-js hidden">
+                <div class="pageContainer-gameResult--Draw-imgContainer">
+                    <img src="./../../img/drew.png" alt="">
+                </div>
+                <div class="pageContainer-gameResult-Draw-btnContainer ">
+                    <button
+                        class="pageContainer-gameResult-Draw-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn2 changeGame-js ">Zmień
+                        gre</button>
+                    <button
+                        class="pageContainer-gameResult-Draw-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn1 playAgain-js">Zagraj
+                        ponownie
+                    </button>
+                    <button
+                        class="pageContainer-gameResult-Draw-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn3 newGame-js">Nowy
+                        przeciwnik</button>
+                </div>
+            </div>
+            <div class="pageContainer-gameResult-Won hidden gameResultWon-js">
                 <div class="pageContainer-gameResult-Won-imgContainer">
                     <img src="./../../img/youWon.png" alt="">
                 </div>
-                <div>
-                    <button>Zagraj jeszcze raz</button>
-                    <button>Zmień gre</button>
-                    <button>Nowy przeciwnik</button>
+                <div class="pageContainer-gameResult-btnContainer">
+                    <button
+                        class="pageContainer-gameResult-Won-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn2 changeGame-js">Zmień
+                        gre</button>
+                    <button
+                        class="pageContainer-gameResult-Won-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn1 playAgain-js">Zagraj
+                        ponownie
+                    </button>
+                    <button
+                        class="pageContainer-gameResult-Won-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn3 newGame-js">Nowy
+                        przeciwnik</button>
                 </div>
             </div>
         </div>
     </div>
 </body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="tic-tac-toe_game.js"></script>
 
 </html>

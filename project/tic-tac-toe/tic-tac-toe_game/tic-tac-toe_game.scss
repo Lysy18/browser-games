@@ -79,7 +79,29 @@ body {
     right: 0;
     bottom: 0;
     background-color: rgba(44, 40, 40, 0.8);
-    &-Won{
+    &-Won{}
+    &-Lose{
+      p{
+        font-size: 34px;
+        letter-spacing: 1.4px;
+        position: absolute;
+        top: 10%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+      }
+      &-imgContainer img{
+        max-width: 300px;
+        height: auto;
+      }
+    }
+    &-Draw{
+      height: 300px !important;
+
+    }
+    &--Draw-imgContainer{
+      margin: 35px 0 40px;
+    }
+    &-Won,&-Lose,&-Draw{
       position: absolute;
       top: 50%;
       left: 50%;
@@ -95,8 +117,28 @@ body {
       &-imgContainer {
         
         & img{
-        height: 350px;
+        height: 340px;
         }
+      }
+      &-btnContainer{
+        padding: 15px 10px;
+        display: flex;
+        justify-content: space-between;
+        width:95%;
+         &-btn{
+          font-size: 20px;
+          width: 165px;
+          height: 66px;
+          background-color: #fff;
+          padding: 10px 0px;
+          transition: 0.3s;
+          border: none;
+          border-bottom: 2px solid rgb(99, 86, 86);
+          z-index: 100;
+            &:hover {
+              font-size: 22px;
+            }
+         }
       }
     }
   }

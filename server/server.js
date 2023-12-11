@@ -86,9 +86,9 @@ io.on("connection", (socket) => {
     console.log("______________DUPA_____________________");
     console.log(lastUserMove, socket.id);
     if (lastUserMove == socket.id) {
-      console.log("duplikujesz ruch");
+      // console.log("duplikujesz ruch");
     } else {
-      console.log("good move broooo");
+      // console.log("good move broooo");
       lastUserMove = userId;
       io.to(gameRoomId).emit("opponentMove", {
         cellIndex,
@@ -97,7 +97,7 @@ io.on("connection", (socket) => {
       });
       // io.to(roomWithOnePerson).emit("userMove", "your oponent");
     }
-    console.log(cellIndex, player, gameRoomId, userId);
+    // console.log(cellIndex, player, gameRoomId, userId);
   });
 
   socket.on("playerResultGameEnd", (data) => {
@@ -114,6 +114,16 @@ io.on("connection", (socket) => {
       io.to(gameRoomId).emit("secondPlayerResult", data);
     }
     // }
+  });
+
+  socket.on("PlayerLeftRoom", (roomName) => {
+    if (roomsAttributes[roomName].occupancy == 2) {
+      updateOccupancy(roomName, 1);
+      console.log(roomsAttributes[roomName].occupancy, roomName);
+    } else {
+      console.log(roomsAttributes[roomName].occupancy, roomName);
+      updateOccupancy(roomName, 1);
+    }
   });
 
   // Dodaj funkcję, która znajduje pokój z określoną ilością osób

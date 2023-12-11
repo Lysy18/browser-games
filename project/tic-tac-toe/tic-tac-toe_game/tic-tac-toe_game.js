@@ -8,6 +8,11 @@ let gameResult = document.querySelector(".gameResult-js");
 let gameResultLose = document.querySelector(".gameResultLose-js");
 let gameResultDraw = document.querySelector(".gameResultDraw-js");
 let gameResultWon = document.querySelector(".gameResultWon-js");
+
+let newGame = document.querySelector(".newGame-js");
+let playAgain = document.querySelector(".playAgain-js");
+let changeGame = document.querySelector(".changeGame-js");
+console.log(newGame, playAgain, changeGame);
 const createRoomFun = () => {
   socket.emit("createRoom", "tak");
   socket.on("personAmout", (receivedPersonAmout) => {
@@ -232,4 +237,20 @@ socket.on("secondPlayerResult", (data) => {
       gameResultLose.classList.remove("hidden");
     }
   }
+});
+newGame.addEventListener("click", (e) => {
+  console.log(e.currentTarget);
+});
+$(".playAgain-js").on("click", function (e) {
+  resetGame();
+  let gameRectangle = $(e.currentTarget).parent().parent();
+  gameRectangle.addClass("hidden");
+  console.log();
+  gameResult.classList.add("hidden");
+  moveHistory = [];
+});
+$(".changeGame-js").on("click", function (e) {
+  resetGame();
+  console.log("changeGame", roomId[0]);
+  socket.emit("PlayerLeftRoom", roomId[0]);
 });
