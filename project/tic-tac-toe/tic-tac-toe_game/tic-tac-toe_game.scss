@@ -44,6 +44,17 @@ body {
         left: 50%;
       }
     }
+    .yourOpponentLeftTheGame{
+      p{
+         font-size: 24px;
+        color: rgb(252, 250, 250);
+        position: absolute;
+        transform: translate(-50%,-50%);
+        text-align: center;
+        top: 50%;
+        left: 50%;
+      }
+    }
       .game-container{
         &-board{
           display: grid;
@@ -73,6 +84,10 @@ body {
     }
   }
   &-gameResult{
+    .onePlayer{
+      text-decoration: line-through;
+      color: #6f6363;
+    }
     position: absolute;
     top: 0;
     left: 0;

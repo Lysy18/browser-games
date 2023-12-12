@@ -1,17 +1,21 @@
 * {
   margin: 0;
   padding: 0;
-  background-color: #454B50;
+  background-color: var(--color1);
+}
+
+:root {
+  --color0:#e7efee;
+  --color1:#d0d7d6;
+  --color2:#939f9f;
+  --color3:#666e70;
+  --color4:#454a4c;
+  --color5:#322f31;
 }
 
 .pageContainer {
   width: 1200px;
-  margin: 0 auto;
 }
-.pageContainer h1 {
-  font-size: 44px;
-  text-align: center;
-  letter-spacing: 1.4px;
-  padding: 15px 20px;
-  background-color: red;
+.pageContainer-games {
+  display: flex;
 }/*# sourceMappingURL=style.css.map */

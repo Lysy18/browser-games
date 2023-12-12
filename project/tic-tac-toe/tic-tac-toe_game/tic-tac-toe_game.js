@@ -12,7 +12,6 @@ let gameResultWon = document.querySelector(".gameResultWon-js");
 let newGame = document.querySelector(".newGame-js");
 let playAgain = document.querySelector(".playAgain-js");
 let changeGame = document.querySelector(".changeGame-js");
-console.log(newGame, playAgain, changeGame);
 const createRoomFun = () => {
   socket.emit("createRoom", "tak");
   socket.on("personAmout", (receivedPersonAmout) => {
@@ -21,6 +20,10 @@ const createRoomFun = () => {
         btnStartGame.classList.add("hidden");
         waitingRoom.classList.remove("hidden");
         gameContainer.classList.remove("hidden");
+      }
+      console.log("jeden gracz");
+      if (!gameResult.classList.contains("hidden")) {
+        $(".playAgain-js").addClass("onePlayer");
       }
     }
 
@@ -54,6 +57,7 @@ socket.on("personAmout", (receivedPersonAmout) => {
     btnStartGame.classList.add("hidden");
     nextMove.classList.remove("hidden");
     personAmout = "2";
+    console.log("dwa gracz");
   }
 });
 
@@ -238,19 +242,38 @@ socket.on("secondPlayerResult", (data) => {
     }
   }
 });
-newGame.addEventListener("click", (e) => {
-  console.log(e.currentTarget);
-});
+
 $(".playAgain-js").on("click", function (e) {
-  resetGame();
-  let gameRectangle = $(e.currentTarget).parent().parent();
-  gameRectangle.addClass("hidden");
-  console.log();
-  gameResult.classList.add("hidden");
-  moveHistory = [];
+  if (!$(".playAgain-js").hasClass("onePlayer")) {
+    console.log(!$(".playAgain-js").hasClass("onePlayer"));
+    resetGame();
+    let gameRectangle = $(e.currentTarget).parent().parent();
+    gameRectangle.addClass("hidden");
+    console.log();
+    gameResult.classList.add("hidden");
+    moveHistory = [];
+
+    socket.on("yourOpponentLeftTheGame", (status) => {
+      console.log(status, "status");
+      if (status == "yes") {
+        $(".yourOpponentLeftTheGame-js").removeClass("hidden");
+      } else {
+        $(".yourOpponentLeftTheGame-js").addClass("hidden");
+      }
+
+      // Tutaj możesz wykonywać inne działania związane z otrzymanym ID pokoju
+    });
+  }
+  console.log(personAmout);
 });
 $(".changeGame-js").on("click", function (e) {
   resetGame();
   console.log("changeGame", roomId[0]);
   socket.emit("PlayerLeftRoom", roomId[0]);
+  window.location.href = "./../../choose-game/index.html";
+});
+
+$(".newGame-js").on("click", function (e) {
+  socket.emit("PlayerLeftRoom", roomId[0]);
+  location.reload();
 });

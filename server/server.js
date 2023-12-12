@@ -61,6 +61,7 @@ io.on("connection", (socket) => {
       console.log(`Klient ${socket.id} dołączył do: ${roomWithOnePerson}`);
       io.to(roomWithOnePerson).emit("personAmout", "2");
       io.to(roomWithOnePerson).emit("gameStart", "start");
+      io.to(roomWithOnePerson).emit("yourOpponentLeftTheGame", "");
 
       io.to(roomWithOnePerson).emit("roomId", roomWithOnePerson);
       lastUserMove = socket.id;
@@ -117,12 +118,20 @@ io.on("connection", (socket) => {
   });
 
   socket.on("PlayerLeftRoom", (roomName) => {
+    console.log(roomsAttributes[roomName].occupancy, roomName, "test");
+
     if (roomsAttributes[roomName].occupancy == 2) {
+      socket.leave(roomName);
+      io.to(roomName).emit("personAmout", "1");
+      io.to(roomName).emit("yourOpponentLeftTheGame", "yes");
+
       updateOccupancy(roomName, 1);
       console.log(roomsAttributes[roomName].occupancy, roomName);
     } else {
+      io.to(roomName).emit("personAmout", "0");
+      updateOccupancy(roomName, 0);
+      socket.leave(roomName);
       console.log(roomsAttributes[roomName].occupancy, roomName);
-      updateOccupancy(roomName, 1);
     }
   });
 
