@@ -1,7 +1,7 @@
 * {
   margin: 0;
   padding: 0;
-  background-color: var(--color1);
+  background-color: #fff;
 }
 
 :root {
@@ -13,9 +13,82 @@
   --color5:#322f31;
 }
 
-.pageContainer {
-  width: 1200px;
+.container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
-.pageContainer-games {
+.container-sliderWrapper {
+  position: relative;
+  width: 950px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 14px;
+  box-shadow: 0 1.5rem 3rem -0.75rem hsla(0, 0%, 0%, 0.35);
+}
+.container-sliderWrapper-slider {
   display: flex;
+  aspect-ratio: 16/9;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  overflow: hidden;
+}
+.container-sliderWrapper-slider .slide {
+  flex: 1 0 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  background-color: var(--color1);
+  width: 100%;
+}
+.container-sliderWrapper-slider .slide .container-sliderWrapper-slider-rectangle {
+  background-color: var(--color1);
+  width: 220px;
+  height: 220px;
+  margin: auto auto;
+  position: relative;
+  transition: 0.5s;
+}
+.container-sliderWrapper-slider .slide .container-sliderWrapper-slider-rectangle:hover a {
+  top: 45%;
+}
+.container-sliderWrapper-slider .slide .container-sliderWrapper-slider-rectangle:hover a img {
+  height: 230px;
+}
+.container-sliderWrapper-slider .slide .container-sliderWrapper-slider-rectangle a {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
+  transition: 0.3s;
+  background-color: var(--color1) !important;
+}
+.container-sliderWrapper-slider .slide .container-sliderWrapper-slider-rectangle a img {
+  border-radius: 5px;
+  height: 220px;
+  z-index: 1;
+}
+.container-sliderWrapper-sliderNav {
+  display: flex;
+  -moz-column-gap: 1rem;
+       column-gap: 1rem;
+  position: absolute;
+  bottom: 0.45rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  background-color: transparent;
+}
+.container-sliderWrapper-sliderNav a {
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  background-color: var(--color5);
+  opacity: 0.75;
+  transition: opacity ease 250ms;
+}
+.container-sliderWrapper-sliderNav a:hover {
+  opacity: 1;
 }/*# sourceMappingURL=style.css.map */

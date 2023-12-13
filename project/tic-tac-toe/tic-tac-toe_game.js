@@ -270,7 +270,7 @@ $(".changeGame-js").on("click", function (e) {
   resetGame();
   console.log("changeGame", roomId[0]);
   socket.emit("PlayerLeftRoom", roomId[0]);
-  window.location.href = "./../../choose-game/index.html";
+  window.location.href = "./../choose-game/index.html";
 });
 
 $(".newGame-js").on("click", function (e) {
