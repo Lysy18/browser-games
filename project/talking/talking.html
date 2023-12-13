@@ -1,11 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Czat</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="talking.js" defer></script>
+    <link rel="stylesheet" href="talking.css">
 </head>
+
 <body>
-    
+    <div id="chat-container">
+        <div class="chat-container-messages">
+            <ul>
+
+            </ul>
+        </div>
+        <div class="chat-container-form">
+            <input type="text">
+            <button>Wyślij</button>
+
+        </div>
+    </div>
 </body>
+
 </html>

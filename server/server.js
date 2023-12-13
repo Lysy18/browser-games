@@ -144,7 +144,9 @@ io.on("connection", (socket) => {
     }
     return null;
   }
-
+  socket.on("chat message", (msg) => {
+    io.emit("chat message", msg);
+  });
   // Dodaj funkcję, która aktualizuje ilość osób w danym pokoju
   function updateOccupancy(roomName, newOccupancy) {
     roomsAttributes[roomName].occupancy = newOccupancy;
