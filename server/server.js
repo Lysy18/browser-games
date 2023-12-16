@@ -15,7 +15,12 @@ let rooms = [];
 let roomsAttributes = {};
 let lastUserMove;
 let onceAgain = [];
-async function generateUniqueRoomName() {
+
+//RPS
+let roomsRPS = [];
+let roomsAttributesRPS = {};
+let gameMemoryRPS = [];
+async function generateUniqueRoomName(game) {
   const adjectives = ["Red", "Blue", "Green", "Yellow", "Purple", "Orange"];
   const nouns = ["Lion", "Tiger", "Bear", "Elephant", "Giraffe", "Zebra"];
 
@@ -30,7 +35,11 @@ async function generateUniqueRoomName() {
     // Sprawdź, czy nazwa pokoju jest unikalna
     if (!rooms.includes(uniqueRoomName)) {
       // Jeżeli jest unikalna, dodaj ją do tablicy i zwróć nazwę
-      rooms.push(uniqueRoomName);
+      if ((game = "")) {
+        rooms.push(uniqueRoomName);
+      } else if ((game = "RPS")) {
+        roomsRPS.push(uniqueRoomName);
+      }
       return uniqueRoomName;
     }
 
@@ -173,6 +182,84 @@ io.on("connection", (socket) => {
   socket.on("sendMessage", (message) => {
     io.emit("messageSent", message);
     console.log(message);
+  });
+
+  //lysy RPS
+  socket.on("createRoomRPS", async () => {
+    const roomWithOnePerson = findRoomWithOccupancyRPS(1);
+    console.log("test");
+    if (roomWithOnePerson) {
+      // Jeżeli jest pokój z jedną osobą, dołącz do niego i zaktualizuj dane
+      socket.join(roomWithOnePerson);
+      updateOccupancyRPS(roomWithOnePerson, 2);
+      console.log(`Klient ${socket.id} dołączył do: ${roomWithOnePerson}`);
+      io.to(roomWithOnePerson).emit("personAmoutRPS", "2");
+      io.to(roomWithOnePerson).emit("gameStartRPS", "start");
+      io.to(roomWithOnePerson).emit("yourOpponentLeftTheGameRPS", "");
+
+      io.to(roomWithOnePerson).emit("roomIdRPS", roomWithOnePerson);
+      lastUserMove = socket.id;
+      io.to(roomWithOnePerson).emit("userMoveRPS", lastUserMove);
+    } else {
+      // Jeżeli nie ma pokoju z jedną osobą lub są już dwa klienty w pokoju
+      const generatedRoomName = await generateUniqueRoomName("RPS");
+
+      if (generatedRoomName) {
+        // Jeżeli udało się wygenerować unikalną nazwę pokoju, dodaj do roomsAttributes
+        addRoomToAttributesRPS(generatedRoomName, 1);
+        socket.join(generatedRoomName);
+        console.log(
+          `Klient ${socket.id} stworzył/połączył się z pokojem: ${generatedRoomName}`
+        );
+        io.to(generatedRoomName).emit("personAmoutRPS", "1");
+        io.to(generatedRoomName).emit("roomIdRPS", generatedRoomName);
+      }
+    }
+  });
+  // Dodaj funkcję, która znajduje pokój z określoną ilością osób
+  function findRoomWithOccupancyRPS(occupancy) {
+    for (const roomName in roomsAttributesRPS) {
+      if (roomsAttributesRPS[roomName].occupancy === occupancy) {
+        return roomName;
+      }
+    }
+    return null;
+  }
+
+  // Dodaj funkcję, która aktualizuje ilość osób w danym pokoju
+  function updateOccupancyRPS(roomName, newOccupancy) {
+    roomsAttributesRPS[roomName].occupancy = newOccupancy;
+  }
+
+  // Dodaj funkcję, która dodaje pokój do roomsAttributes
+  function addRoomToAttributesRPS(roomName, occupancy) {
+    roomsAttributesRPS[roomName] = { occupancy };
+  }
+
+  socket.on("userMoveRPS", ({ type, gameRoomId, userId }) => {
+    console.log("______________DUPA_____________________");
+    console.log(lastUserMove, socket.id);
+
+    // io.to(roomWithOnePerson).emit("userMove", "your oponent");
+
+    gameMemoryRPS.push([userId, type]);
+    console.log(type, gameRoomId, userId, gameMemoryRPS);
+    if (gameMemoryRPS.length == 1) {
+      io.to(gameRoomId).emit("gameResult", gameMemoryRPS);
+    } else if (gameMemoryRPS.length > 1) {
+      io.to(gameRoomId).emit("gameResult", gameMemoryRPS);
+      gameMemoryRPS = [];
+    }
+  });
+
+  socket.on("playerResultGameEndRPS", (data) => {
+    console.log("Otrzymane dane od klienta:", data);
+    let gameRoomId = data.gameRoomId;
+    let userId = data.userId;
+    let result = data.result;
+    console.log(`${userId} Wygrał`, result, gameRoomId);
+    console.log(socket.id, userId);
+    io.to(gameRoomId).emit("secondPlayerResultRPS", data);
   });
 });
 

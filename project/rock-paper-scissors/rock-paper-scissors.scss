@@ -1,12 +1,24 @@
 $background-color: #f0f0f0;
 $text-color: #333;
+:root{
+  --color0:#f3f9f8;
+  --color1:#e7edec;
+  --color2:#939f9f;
+  --color3:#666e70;
+  --color4:#454a4c;
+  --color5:#322f31;
+}
+
+
+
+
 body {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #f4f4f4;
+    background-color: var(--color0);
   }
 .hidden{
     display: none !important;
@@ -18,32 +30,128 @@ body {
     align-items: center;
     justify-content: center;
     padding: 20px;
-    background-color: $background-color;
+    background-color: var(--color1);
     .startBtnContainer{
       &-startBtn{
         width: 200px;
         height: 160px;
       }
     }
+    .pageBlocker{
+      z-index: 9999;
+        width: 100%;
+        height: 100vh;
+        opacity: 0.7;
+        background-color: rgb(24, 23, 23);
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        &-waitingRoom{
+          color: rgb(252, 250, 250);
+          position: absolute;
+          transform: translate(-50%,-50%);
+          top: 50%;
+          left: 50%;
+        }
+      }
+
+
+
+
+
     .choices {
         display: flex;
+        flex-direction: column;
         text-align: center;
         justify-content: center;
-        .choice-button {
-            margin: 10px;
-            padding: 10px 20px;
-            background-color: lighten($background-color, 10%);
+        // position: relative;
+        #game-status{
+          position: absolute;
+          display: flex;
+          justify-content: center;
+          bottom: 10px;
+          left: 10px;
+          background-color: var(--color1);
+          .score{
+              font-size: 24px;
+              padding: 10px 4px;
+          }
+        }
+        .gameAnnouncement{
+          position: absolute;
+          padding: 6px 10px;
+          top: 5px;
+          border-radius: 5px;
+          background-color: var(--color1);
+          &-yourOpponentMadeMove{
+            left: 10px;
+          }
+          &-waitForMoveYourOpponent{
+            right: 10px;
+          }
+        }
+        .choice{
+          display: flex;
+          gap: 30px;
+            &-button {
+            // margin: 10px;
+            // padding: 10px 20px;
+            // background-color: lighten($background-color, 10%);
+            background-color: transparent;
+            // background-color: red;
             border: none;
             border-radius: 5px;
             // flex-direction: column;
-            &-img{
+            // padding: 10px 20px;
+            // background-color: lighten($background-color, 10%);
+            
+            &-imgContainer{
+              position: relative;
+              width: 200px;
+              height: 200px;
+              // padding: 10px 20px;
+              
+              &-img{
                 width: 200px;
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                transition: 0.3s;
+              }
             }
-            &:hover {
-                background-color: darken($background-color, 10%);
-                cursor: pointer;
+            &:hover{
+              // background-color: red;
+              .choice-button-imgContainer{
+                position: relative;
+                width: 200px;
+                height: 200px;
+                &-img{
+                  width: 200px;
+                  position: absolute;
+                  // left: -10px;
+                  top: -10px;
+                }
+              }
+              
+            }
+            &:active{
+              // background-color: red;
+              .choice-button-imgContainer{
+                position: relative;
+                width: 200px;
+                height: 200px;
+                &-img{
+                  -webkit-box-shadow: 0px 0px 20px 1px rgba(6, 6, 6, 1);
+                  -moz-box-shadow: 0px 0px 20px 1px rgba(6, 6, 6, 1);
+                  box-shadow: 0px 0px 20px 1px rgba(6, 6, 6, 1);
+                  top: -14px;
+                }
+              }
             }
         }
+      }
     }
 
     #result, #game-status {
@@ -51,4 +159,79 @@ body {
         font-size: 20px;
         margin: 20px 0;
     }
+      //pop up end game lysy
+  &-gameResult{
+    .onePlayer{
+      text-decoration: line-through;
+      color: #6f6363;
+    }
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(44, 40, 40, 0.8);
+    &-Won{}
+    &-Lose{
+      p{
+        font-size: 34px;
+        letter-spacing: 1.4px;
+        position: absolute;
+        top: 10%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+      }
+      &-imgContainer img{
+        max-width: 300px;
+        height: auto;
+      }
+    }
+    &-Draw{
+      height: 300px !important;
+
+    }
+    &--Draw-imgContainer{
+      margin: 35px 0 40px;
+    }
+    &-Won,&-Lose,&-Draw{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      border-radius: 15px;
+      padding: 15px;
+      width: 600px;
+      height: 500px;
+      background-color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      &-imgContainer {
+        
+        & img{
+        height: 340px;
+        }
+      }
+      &-btnContainer{
+        padding: 15px 10px;
+        display: flex;
+        justify-content: space-between;
+        width:95%;
+         &-btn{
+          font-size: 20px;
+          width: 165px;
+          height: 66px;
+          background-color: #fff;
+          padding: 10px 0px;
+          transition: 0.3s;
+          border: none;
+          border-bottom: 2px solid rgb(99, 86, 86);
+          z-index: 100;
+            &:hover {
+              font-size: 22px;
+            }
+         }
+      }
+    }
+  }
 }

@@ -13,9 +13,10 @@
 </head>
 
 <body>
-    <div class="pageContainer">
+    <div class="pageContainer body">
         <div class="startBtnContainer">
             <button class="startBtnContainer-startBtn startBtn-js">START</button>
+
         </div>
         <div class="pageBlocker hidden waitingRoom-js">
             <div class=" pageBlocker-waitingRoom ">
@@ -30,19 +31,99 @@
         </div>
 
 
-        <div id="game-status"></div>
+
         <div class="choices game-container-js hidden">
-            <button class="choice-button" id="rock">
-                <img class="choice-button-img" src="./img/kamien.png" alt="">
-            </button>
-            <button class="choice-button" id="paper">
-                <img class="choice-button-img" src="./img/papier.png" alt="">
-            </button>
-            <button class="choice-button" id="scissors">
-                <img class="choice-button-img" src="./img/nozyczki.png" alt="">
-            </button>
+            <div class="nextMove">
+                <p class="nextMove-js hidden">Poczekaj na ruch twojego przeciwnika</p>
+            </div>
+            <div id="game-status" class="hidden">
+                <div class="score">
+                    <span class="score-label"></span>
+                    <span class="score-value" id="yourScore">0</span>
+                </div>
+                <div class="score">
+                    <span class="score-label"></span>
+                    <span class="score-value" id="yourOpponent">0</span>
+                </div>
+            </div>
+            <div class="gameAnnouncement gameAnnouncement-yourOpponentMadeMove yourOpponentMadeMove-js hidden">Twój
+                przeciwnik wykonał
+                swój ruch.</div>
+            <div class="gameAnnouncement gameAnnouncement-waitForMoveYourOpponent waitForMoveYourOpponent-js hidden">
+                Poczekaj na ruch
+                przeciwnika.</div>
+            <div class="choice">
+                <button class="choice-button gameAction-js" id="rock">
+                    <div class="choice-button-imgContainer">
+                        <img class="choice-button-imgContainer-img" src="./img/kamien.png" alt="">
+                    </div>
+                </button>
+                <button class="choice-button gameAction-js" id="paper">
+                    <div class="choice-button-imgContainer">
+                        <img class="choice-button-imgContainer-img" src="./img/papier.png" alt="">
+                    </div>
+                </button>
+                <button class="choice-button gameAction-js" id="scissors">
+                    <div class="choice-button-imgContainer">
+                        <img class="choice-button-imgContainer-img" src="./img/nozyczki.png" alt="">
+                    </div>
+                </button>
+            </div>
         </div>
-        <div id="result"></div>
+        <div class="pageContainer-gameResult gameResult-js hidden ">
+            <div class="pageContainer-gameResult-Lose hidden  gameResultLose-js">
+                <p>Przegrałeś</p>
+                <div class="pageContainer-gameResult-Lose-imgContainer">
+                    <img src="./../img/youLost.png" alt="">
+                </div>
+                <div class="pageContainer-gameResult-Lose-btnContainer">
+                    <button
+                        class="pageContainer-gameResult-Lose-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn2 changeGame-js">Zmień
+                        gre</button>
+                    <button
+                        class="pageContainer-gameResult-Lose-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn1 playAgain-js">Zagraj
+                        ponownie
+                    </button>
+                    <button
+                        class="pageContainer-gameResult-Lose-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn3 newGame-js">Nowy
+                        przeciwnik</button>
+                </div>
+            </div>
+            <div class="pageContainer-gameResult-Draw  gameResultDraw-js hidden">
+                <div class="pageContainer-gameResult--Draw-imgContainer">
+                    <img src="./../img/drew.png" alt="">
+                </div>
+                <div class="pageContainer-gameResult-Draw-btnContainer ">
+                    <button
+                        class="pageContainer-gameResult-Draw-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn2 changeGame-js ">Zmień
+                        gre</button>
+                    <button
+                        class="pageContainer-gameResult-Draw-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn1 playAgain-js">Zagraj
+                        ponownie
+                    </button>
+                    <button
+                        class="pageContainer-gameResult-Draw-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn3 newGame-js">Nowy
+                        przeciwnik</button>
+                </div>
+            </div>
+            <div class="pageContainer-gameResult-Won hidden gameResultWon-js">
+                <div class="pageContainer-gameResult-Won-imgContainer">
+                    <img src="./../img/youWon.png" alt="">
+                </div>
+                <div class="pageContainer-gameResult-btnContainer">
+                    <button
+                        class="pageContainer-gameResult-Won-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn2 changeGame-js">Zmień
+                        gre</button>
+                    <button
+                        class="pageContainer-gameResult-Won-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn1 playAgain-js">Zagraj
+                        ponownie
+                    </button>
+                    <button
+                        class="pageContainer-gameResult-Won-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn3 newGame-js">Nowy
+                        przeciwnik</button>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="rock-paper-scissors.js"></script>
