@@ -35,7 +35,7 @@
   scroll-behavior: smooth;
   overflow: hidden;
 }
-.container-sliderWrapper-slider .slide {
+.container-sliderWrapper-slider #slide-1, .container-sliderWrapper-slider #slide-2, .container-sliderWrapper-slider #slide-3 {
   flex: 1 0 100%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -43,7 +43,7 @@
   background-color: var(--color1);
   width: 100%;
 }
-.container-sliderWrapper-slider .slide .container-sliderWrapper-slider-rectangle {
+.container-sliderWrapper-slider #slide-1 .container-sliderWrapper-slider-rectangle, .container-sliderWrapper-slider #slide-2 .container-sliderWrapper-slider-rectangle, .container-sliderWrapper-slider #slide-3 .container-sliderWrapper-slider-rectangle {
   background-color: var(--color1);
   width: 220px;
   height: 220px;
@@ -51,13 +51,13 @@
   position: relative;
   transition: 0.5s;
 }
-.container-sliderWrapper-slider .slide .container-sliderWrapper-slider-rectangle:hover a {
+.container-sliderWrapper-slider #slide-1 .container-sliderWrapper-slider-rectangle:hover a, .container-sliderWrapper-slider #slide-2 .container-sliderWrapper-slider-rectangle:hover a, .container-sliderWrapper-slider #slide-3 .container-sliderWrapper-slider-rectangle:hover a {
   top: 45%;
 }
-.container-sliderWrapper-slider .slide .container-sliderWrapper-slider-rectangle:hover a img {
+.container-sliderWrapper-slider #slide-1 .container-sliderWrapper-slider-rectangle:hover a img, .container-sliderWrapper-slider #slide-2 .container-sliderWrapper-slider-rectangle:hover a img, .container-sliderWrapper-slider #slide-3 .container-sliderWrapper-slider-rectangle:hover a img {
   height: 230px;
 }
-.container-sliderWrapper-slider .slide .container-sliderWrapper-slider-rectangle a {
+.container-sliderWrapper-slider #slide-1 .container-sliderWrapper-slider-rectangle a, .container-sliderWrapper-slider #slide-2 .container-sliderWrapper-slider-rectangle a, .container-sliderWrapper-slider #slide-3 .container-sliderWrapper-slider-rectangle a {
   position: absolute;
   transform: translate(-50%, -50%);
   left: 50%;
@@ -65,7 +65,7 @@
   transition: 0.3s;
   background-color: var(--color1) !important;
 }
-.container-sliderWrapper-slider .slide .container-sliderWrapper-slider-rectangle a img {
+.container-sliderWrapper-slider #slide-1 .container-sliderWrapper-slider-rectangle a img, .container-sliderWrapper-slider #slide-2 .container-sliderWrapper-slider-rectangle a img, .container-sliderWrapper-slider #slide-3 .container-sliderWrapper-slider-rectangle a img {
   border-radius: 5px;
   height: 220px;
   z-index: 1;

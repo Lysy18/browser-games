@@ -4,22 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Czat</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="/socket.io/socket.io.js"></script>
     <script src="talking.js" defer></script>
     <link rel="stylesheet" href="talking.css">
+    <title>Tic-Tac-Toe</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"
+        integrity="sha512-Xm9qbB6Pu06k3PUwPj785dyTl6oHxgsv9nHp7ej7nCpAqGZT3OZpsELuCYX05DdonFpTlBpXMOxjavIAIUwr0w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="./../../../server/server.js">
 </head>
 
 <body>
-    <div id="chat-container">
+    <div class="chat-container">
         <div class="chat-container-messages">
-            <ul>
-
+            <ul class="ulList">
+                <li class="liElement">Przykład</li>
             </ul>
         </div>
         <div class="chat-container-form">
-            <input type="text">
-            <button>Wyślij</button>
+            <input type="text" class="inputMessage">
+            <button class="btnSend">Wyślij</button>
 
         </div>
     </div>

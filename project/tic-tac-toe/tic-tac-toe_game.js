@@ -252,20 +252,40 @@ $(".playAgain-js").on("click", function (e) {
     console.log();
     gameResult.classList.add("hidden");
     moveHistory = [];
-
+    const userId = socket.id;
+    socket.emit("playAgain", {
+      roomName: roomId[0],
+      userId,
+    });
     socket.on("yourOpponentLeftTheGame", (status) => {
       console.log(status, "status");
       if (status == "yes") {
-        $(".yourOpponentLeftTheGame-js").removeClass("hidden");
+        if (gameResult.classList.contains("hidden")) {
+          $(".yourOpponentLeftTheGame-js").removeClass("hidden");
+        }
+        if (!$(".waitForYourOpponent-js").hasClass("hidden")) {
+          $(".waitForYourOpponent-js").addClass("hidden");
+        }
       } else {
         $(".yourOpponentLeftTheGame-js").addClass("hidden");
       }
-
       // Tutaj możesz wykonywać inne działania związane z otrzymanym ID pokoju
     });
+    $(".waitForYourOpponent-js").removeClass("hidden");
   }
   console.log(personAmout);
 });
+
+socket.on("playOnceAgain", (status) => {
+  console.log(status, "status");
+  if (status == "yes") {
+    $(".waitForYourOpponent-js").addClass("hidden");
+    console.log("playAgain ZJeby");
+  }
+
+  // Tutaj możesz wykonywać inne działania związane z otrzymanym ID pokoju
+});
+
 $(".changeGame-js").on("click", function (e) {
   resetGame();
   console.log("changeGame", roomId[0]);

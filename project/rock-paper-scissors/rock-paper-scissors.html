@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kamień, Papier, Nożyce - Multiplayer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"
+        integrity="sha512-Xm9qbB6Pu06k3PUwPj785dyTl6oHxgsv9nHp7ej7nCpAqGZT3OZpsELuCYX05DdonFpTlBpXMOxjavIAIUwr0w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="./../../../server/server.js">
+    <link rel="stylesheet" href="rock-paper-scissors.css">
+</head>
+
+<body>
+    <div class="pageContainer">
+        <div class="startBtnContainer">
+            <button class="startBtnContainer-startBtn startBtn-js">START</button>
+        </div>
+        <div class="pageBlocker hidden waitingRoom-js">
+            <div class=" pageBlocker-waitingRoom ">
+                <p>Oczekiwanie na drugiego gracza</p>
+            </div>
+        </div>
+        <div class="yourOpponentLeftTheGame pageBlocker yourOpponentLeftTheGame-js hidden">
+            <p>Twój przeciwnik opuścił grę.<br /> Zaraz znajdziemy Ci nowego rywala.</p>
+        </div>
+        <div class="waitForYourOpponent pageBlocker waitForYourOpponent-js hidden">
+            <p>Oczekujemy na decyzję twojego rywala.<br /> Bądź cierpliwy</p>
+        </div>
+
+
+        <div id="game-status"></div>
+        <div class="choices game-container-js hidden">
+            <button class="choice-button" id="rock">
+                <img class="choice-button-img" src="./img/kamien.png" alt="">
+            </button>
+            <button class="choice-button" id="paper">
+                <img class="choice-button-img" src="./img/papier.png" alt="">
+            </button>
+            <button class="choice-button" id="scissors">
+                <img class="choice-button-img" src="./img/nozyczki.png" alt="">
+            </button>
+        </div>
+        <div id="result"></div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="rock-paper-scissors.js"></script>
+</body>
+
+</html>

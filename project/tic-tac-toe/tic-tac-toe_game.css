@@ -37,7 +37,7 @@ body {
   top: 50%;
   left: 50%;
 }
-.pageContainer .yourOpponentLeftTheGame p {
+.pageContainer .yourOpponentLeftTheGame p, .pageContainer .waitForYourOpponent p {
   font-size: 24px;
   color: rgb(252, 250, 250);
   position: absolute;
@@ -45,6 +45,7 @@ body {
   text-align: center;
   top: 50%;
   left: 50%;
+  width: 100%;
 }
 .pageContainer .game-container-board {
   display: grid;

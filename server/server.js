@@ -14,6 +14,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 let rooms = [];
 let roomsAttributes = {};
 let lastUserMove;
+let onceAgain = [];
 async function generateUniqueRoomName() {
   const adjectives = ["Red", "Blue", "Green", "Yellow", "Purple", "Orange"];
   const nouns = ["Lion", "Tiger", "Bear", "Elephant", "Giraffe", "Zebra"];
@@ -135,6 +136,18 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("playAgain", ({ roomName, userId }) => {
+    console.log(roomName, userId);
+    onceAgain.push(userId);
+    console.log(`______________${onceAgain}`);
+    if (onceAgain.length == 2) {
+      io.to(roomName).emit("playOnceAgain", "yes");
+      onceAgain = [];
+      console.log("Gra zaczyna się na nowo Ci sami gracze", onceAgain.length);
+    }
+    console.log(onceAgain.length);
+  });
+
   // Dodaj funkcję, która znajduje pokój z określoną ilością osób
   function findRoomWithOccupancy(occupancy) {
     for (const roomName in roomsAttributes) {
@@ -154,6 +167,13 @@ io.on("connection", (socket) => {
   function addRoomToAttributes(roomName, occupancy) {
     roomsAttributes[roomName] = { occupancy };
   }
+
+  //talking lysy
+
+  socket.on("sendMessage", (message) => {
+    io.emit("messageSent", message);
+    console.log(message);
+  });
 });
 
 httpServer.listen(3500, () => {
