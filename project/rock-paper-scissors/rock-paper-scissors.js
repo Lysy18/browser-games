@@ -14,7 +14,7 @@ let playAgain = document.querySelector(".playAgain-js");
 let changeGame = document.querySelector(".changeGame-js");
 
 let gameAction = document.querySelector(".gameAction-js");
-let amountWin = 3;
+let amountWin = 1;
 const createRoomFun = () => {
   socket.emit("createRoomRPS", "tak");
   socket.on("personAmoutRPS", (receivedPersonAmout) => {
@@ -25,9 +25,9 @@ const createRoomFun = () => {
         gameContainer.classList.remove("hidden");
       }
       console.log("jeden gracz");
-      //   if (!gameResult.classList.contains("hidden")) {
-      //     $(".playAgain-js").addClass("onePlayer");
-      //   }
+      if (!gameResult.classList.contains("hidden")) {
+        $(".playAgain-js").addClass("onePlayer");
+      }
     }
 
     // Tutaj możesz wykonywać inne działania związane z otrzymanym ID pokoju
@@ -154,6 +154,18 @@ socket.on("gameResult", (data) => {
         result: "win",
       });
       gameResultWon.classList.remove("hidden");
+    } else {
+      $(".result-js").removeClass("hidden");
+      if (yourResult == "1") {
+        $(".resultParagraph-js")[0].textContent = "Wygrałeś!";
+      } else if (yourResult == "0") {
+        $(".resultParagraph-js")[0].textContent = "Przegrałeś";
+      } else {
+        $(".resultParagraph-js")[0].textContent = "Remis!";
+      }
+      setTimeout(() => {
+        $(".result-js").addClass("hidden");
+      }, "2000");
     }
   }
 });
@@ -189,6 +201,7 @@ function determineWinner(playerMove, opponentMove) {
 }
 
 socket.on("secondPlayerResultRPS", (data) => {
+  $(".result-js").addClass("hidden");
   let gameRoomId = data.gameRoomId;
   let winnerUserId = data.userId;
   let result = data.result;
@@ -199,4 +212,60 @@ socket.on("secondPlayerResultRPS", (data) => {
   if (winnerUserId != socket.id && result == "win") {
     gameResultLose.classList.remove("hidden");
   }
+});
+
+$(".playAgain-js").on("click", function (e) {
+  if (!$(".playAgain-js").hasClass("onePlayer")) {
+    console.log(!$(".playAgain-js").hasClass("onePlayer"));
+    let gameRectangle = $(e.currentTarget).parent().parent();
+    gameRectangle.addClass("hidden");
+    console.log(gameRectangle);
+    gameResult.classList.add("hidden");
+    moveHistory = [];
+    const userId = socket.id;
+    socket.emit("playAgainRPS", {
+      roomName: roomId[0],
+      userId,
+    });
+    socket.on("yourOpponentLeftTheGameRPS", (status) => {
+      console.log(status, "status");
+      if (status == "yes") {
+        if (gameResult.classList.contains("hidden")) {
+          $(".yourOpponentLeftTheGame-js").removeClass("hidden");
+        }
+        if (!$(".waitForYourOpponent-js").hasClass("hidden")) {
+          $(".waitForYourOpponent-js").addClass("hidden");
+        }
+      } else {
+        $(".yourOpponentLeftTheGame-js").addClass("hidden");
+      }
+      // Tutaj możesz wykonywać inne działania związane z otrzymanym ID pokoju
+    });
+    $(".waitForYourOpponent-js").removeClass("hidden");
+    $("#yourScore")[0].textContent = "0";
+    $("#yourOpponent")[0].textContent = "0";
+    $("#game-status").addClass("hidden");
+  }
+  console.log(personAmout);
+});
+
+socket.on("playOnceAgainRPS", (status) => {
+  console.log(status, "status");
+  if (status == "yes") {
+    $(".waitForYourOpponent-js").addClass("hidden");
+    console.log("playAgain ZJeby");
+  }
+
+  // Tutaj możesz wykonywać inne działania związane z otrzymanym ID pokoju
+});
+
+$(".changeGame-js").on("click", function (e) {
+  console.log("changeGame", roomId[0]);
+  socket.emit("PlayerLeftRoomRPS", roomId[0]);
+  window.location.href = "./../choose-game/index.html";
+});
+
+$(".newGame-js").on("click", function (e) {
+  socket.emit("PlayerLeftRoomRPS", roomId[0]);
+  location.reload();
 });

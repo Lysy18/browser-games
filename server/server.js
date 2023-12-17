@@ -20,6 +20,8 @@ let onceAgain = [];
 let roomsRPS = [];
 let roomsAttributesRPS = {};
 let gameMemoryRPS = [];
+let onceAgainRPS = [];
+
 async function generateUniqueRoomName(game) {
   const adjectives = ["Red", "Blue", "Green", "Yellow", "Purple", "Orange"];
   const nouns = ["Lion", "Tiger", "Bear", "Elephant", "Giraffe", "Zebra"];
@@ -260,6 +262,39 @@ io.on("connection", (socket) => {
     console.log(`${userId} Wygrał`, result, gameRoomId);
     console.log(socket.id, userId);
     io.to(gameRoomId).emit("secondPlayerResultRPS", data);
+  });
+
+  socket.on("PlayerLeftRoomRPS", (roomName) => {
+    console.log(roomsAttributesRPS[roomName].occupancy, roomName, "test");
+
+    if (roomsAttributesRPS[roomName].occupancy == 2) {
+      socket.leave(roomName);
+      io.to(roomName).emit("personAmoutRPS", "1");
+      io.to(roomName).emit("yourOpponentLeftTheGameRPS", "yes");
+
+      updateOccupancyRPS(roomName, 1);
+      console.log(roomsAttributesRPS[roomName].occupancy, roomName);
+    } else {
+      io.to(roomName).emit("personAmoutRPS", "0");
+      updateOccupancyRPS(roomName, 0);
+      socket.leave(roomName);
+      console.log(roomsAttributesRPS[roomName].occupancy, roomName);
+    }
+  });
+
+  socket.on("playAgainRPS", ({ roomName, userId }) => {
+    onceAgainRPS.push(userId);
+    console.log(onceAgainRPS, onceAgainRPS.length);
+    console.log(`______________${onceAgainRPS}`);
+    if (onceAgainRPS.length == 2) {
+      io.to(roomName).emit("playOnceAgainRPS", "yes");
+      onceAgainRPS = [];
+      console.log(
+        "Gra zaczyna się na nowo Ci sami gracze",
+        onceAgainRPS.length
+      );
+    }
+    console.log(onceAgain.length);
   });
 });
 
