@@ -210,18 +210,6 @@ socket.on("opponentMove", ({ cellIndex, player, lastUserMove }) => {
   if (lastUserMove != socket.id) {
     nextMove.innerText = "Twój ruch!";
   }
-
-  // Sprawdź, czy jest zwycięzca
-  // if (checkWinner()) {
-  //   alert(`Gracz ${player} wygrywa!`);
-  //   resetGame();
-  // } else if (isBoardFull()) {
-  //   // Sprawdź, czy plansza jest pełna (remis)
-  //   alert("Remis!");
-  //   resetGame();
-  // } else {
-  //   // Zmień aktualnego gracza
-  // }
 });
 
 //obsługa końca gry u opponenta
