@@ -60,10 +60,6 @@ socket.on("userMoveRPS", (userId) => {
   }
 });
 
-const cells = document.querySelectorAll(".cell");
-let currentPlayer = "X";
-let moveHistory = [];
-
 let personAmout;
 socket.on("personAmoutRPS", (receivedPersonAmout) => {
   if (receivedPersonAmout == 2) {
@@ -221,7 +217,6 @@ $(".playAgain-js").on("click", function (e) {
     gameRectangle.addClass("hidden");
     console.log(gameRectangle);
     gameResult.classList.add("hidden");
-    moveHistory = [];
     const userId = socket.id;
     socket.emit("playAgainRPS", {
       roomName: roomId[0],

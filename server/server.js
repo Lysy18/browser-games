@@ -16,11 +16,19 @@ let roomsAttributes = {};
 let lastUserMove;
 let onceAgain = [];
 
+//talking
+let messageHistory = [];
+
 //RPS
 let roomsRPS = [];
 let roomsAttributesRPS = {};
 let gameMemoryRPS = [];
 let onceAgainRPS = [];
+//SLOWKA
+let roomsSLOWKA = [];
+let roomsAttributesSLOWKA = {};
+let gameMemorySLOWKA = [];
+let onceAgainSLOWKA = [];
 
 async function generateUniqueRoomName(game) {
   const adjectives = ["Red", "Blue", "Green", "Yellow", "Purple", "Orange"];
@@ -181,9 +189,20 @@ io.on("connection", (socket) => {
 
   //talking lysy
 
-  socket.on("sendMessage", (message) => {
-    io.emit("messageSent", message);
-    console.log(message);
+  socket.on("joinChat", (userId) => {
+    console.log(userId, socket.id);
+    data = [messageHistory, socket.id];
+    socket.emit("messageHistory", data);
+  });
+
+  socket.on("sendMessage", (data) => {
+    console.log(data, "test");
+    messageHistory.push(data); // Dodaj nową wiadomość do historii
+    if (messageHistory.length > 100) {
+      // Opcjonalnie ogranicz rozmiar historii
+      messageHistory.shift();
+    }
+    io.emit("messageSent", data);
   });
 
   //lysy RPS
@@ -295,6 +314,73 @@ io.on("connection", (socket) => {
       );
     }
     console.log(onceAgain.length);
+  });
+
+  // lysy SLOWKA
+  socket.on("createRoomSLOWKA", async () => {
+    const roomWithOnePerson = findRoomWithOccupancySLOWKA(1);
+    console.log("test");
+    if (roomWithOnePerson) {
+      // Jeżeli jest pokój z jedną osobą, dołącz do niego i zaktualizuj dane
+      socket.join(roomWithOnePerson);
+      updateOccupancySLOWKA(roomWithOnePerson, 2);
+      console.log(`Klient ${socket.id} dołączył do: ${roomWithOnePerson}`);
+      io.to(roomWithOnePerson).emit("personAmoutSLOWKA", "2");
+      io.to(roomWithOnePerson).emit("gameStartSLOWKA", "start");
+      io.to(roomWithOnePerson).emit("yourOpponentLeftTheGameSLOWKA", "");
+
+      io.to(roomWithOnePerson).emit("roomIdSLOWKA", roomWithOnePerson);
+      lastUserMove = socket.id;
+      io.to(roomWithOnePerson).emit("userSetSLOWKA", lastUserMove);
+    } else {
+      // Jeżeli nie ma pokoju z jedną osobą lub są już dwa klienty w pokoju
+      const generatedRoomName = await generateUniqueRoomName("SLOWKA");
+
+      if (generatedRoomName) {
+        // Jeżeli udało się wygenerować unikalną nazwę pokoju, dodaj do roomsAttributes
+        addRoomToAttributesSLOWKA(generatedRoomName, 1);
+        socket.join(generatedRoomName);
+        console.log(
+          `Klient ${socket.id} stworzył/połączył się z pokojem: ${generatedRoomName}`
+        );
+        io.to(generatedRoomName).emit("personAmoutSLOWKA", "1");
+        io.to(generatedRoomName).emit("roomIdSLOWKA", generatedRoomName);
+      }
+    }
+  });
+  // Dodaj funkcję, która znajduje pokój z określoną ilością osób
+  function findRoomWithOccupancySLOWKA(occupancy) {
+    for (const roomName in roomsAttributesSLOWKA) {
+      if (roomsAttributesSLOWKA[roomName].occupancy === occupancy) {
+        return roomName;
+      }
+    }
+    return null;
+  }
+
+  // Dodaj funkcję, która aktualizuje ilość osób w danym pokoju
+  function updateOccupancySLOWKA(roomName, newOccupancy) {
+    roomsAttributesSLOWKA[roomName].occupancy = newOccupancy;
+  }
+
+  // Dodaj funkcję, która dodaje pokój do roomsAttributes
+  function addRoomToAttributesSLOWKA(roomName, occupancy) {
+    roomsAttributesSLOWKA[roomName] = { occupancy };
+  }
+
+  socket.on("userSetSLOWKA", (data) => {
+    console.log("______________DUPA_____________________");
+    // console.log(lastUserMove, socket.id);
+
+    // io.to(roomWithOnePerson).emit("userMove", "your oponent");
+    let gameRoomId = data[2];
+    gameMemorySLOWKA.push(data);
+    if (gameMemorySLOWKA.length == 1) {
+      io.to(gameRoomId).emit("startGameSLOWKA", gameMemorySLOWKA);
+    } else if (gameMemorySLOWKA.length > 1) {
+      io.to(gameRoomId).emit("startGameSLOWKA", gameMemorySLOWKA);
+      gameMemorySLOWKA = [];
+    }
   });
 });
 

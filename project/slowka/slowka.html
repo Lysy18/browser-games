@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Słówka</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"
+        integrity="sha512-Xm9qbB6Pu06k3PUwPj785dyTl6oHxgsv9nHp7ej7nCpAqGZT3OZpsELuCYX05DdonFpTlBpXMOxjavIAIUwr0w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="./../../../server/server.js">
+    <link rel="stylesheet" href="slowka.css">
+</head>
+
+<body>
+    <div class="pageContainer body">
+        <div class="startBtnContainer">
+            <button class="startBtnContainer-startBtn startBtn-js ">START</button>
+        </div>
+        <div class="pageBlocker hidden waitingRoom-js">
+            <div class=" pageBlocker-waitingRoom ">
+                <p>Oczekiwanie na drugiego gracza.</p>
+            </div>
+        </div>
+        <div class="yourOpponentLeftTheGame pageBlocker yourOpponentLeftTheGame-js hidden">
+            <p>Twój przeciwnik opuścił grę.<br /> Zaraz znajdziemy Ci nowego rywala.</p>
+        </div>
+        <div class="waitForYourOpponent pageBlocker waitForYourOpponent-js hidden">
+            <p>Oczekujemy na decyzję twojego rywala.<br /> Bądź cierpliwy</p>
+        </div>
+        <div class="result-js pageBlocker hidden">
+            <p class="  pageBlocker-waitingRoom pageBlocker-waitingRoom-result resultParagraph-js"></p>
+        </div>
+
+
+
+        <div class="game-container  game-container-js hidden ">
+            <div class="nextMove">
+                <p class="nextMove-js hidden">Poczekaj na ruch twojego przeciwnika.</p>
+            </div>
+            <div class=" chooseCategoryForYourOpponent chooseCategoryForYourOpponent-js">
+                <p>Wybierz kategorię dla swojego przeciwnika</p>
+                <div class="chooseCategoryForYourOpponent-container">
+                    <div class="chooseCategoryForYourOpponent-container-categoryDiv categoryGame-js" id="animals">
+                        <p>Zwierzęta</p>
+                    </div>
+                    <div class="chooseCategoryForYourOpponent-container-categoryDiv categoryGame-js" id="colors">
+                        <p>Kolory</p>
+                    </div>
+                    <div class="chooseCategoryForYourOpponent-container-categoryDiv categoryGame-js" id="countries">
+                        <p>Kraje</p>
+                    </div>
+                </div>
+            </div>
+            <div class="chooseWordForYourOpponent chooseWordForYourOpponent-js hidden">
+                <p>Wybierz "Słówko" dla swojego przeciwnika i oczekuj na swoje.</p>
+                <div class="chooseWordForYourOpponent-container">
+                    <div class="chooseWordForYourOpponent-container-wordDiv wordGame-js" id="word-one">
+                        <p id="paragrphOne"></p>
+                    </div>
+                    <div class="chooseWordForYourOpponent-container-wordDiv wordGame-js" id="word-two">
+                        <p id="paragrphTwo"></p>
+                    </div>
+                    <div class="chooseWordForYourOpponent-container-wordDiv wordGame-js" id="word-three">
+                        <p id="paragrphThree"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="game-container-StartGame  game-container-StartGame-js hidden">
+                <div class="game-container-StartGame-category">
+                    <p>Twoja kategoria: <span class="categoryName-js"></span></p>
+                </div>
+                <div class="game-container-StartGame-container ">
+                    <div class="game-container-StartGame-container-letter game-container-StartGame-container-letter-js">
+                    </div>
+                    <div class="game-container-StartGame-container-area">
+                        <input class="game-container-StartGame-container-area-input guessWordInput-js" type="text">
+                        <button class="game-container-StartGame-container-area-button tryGuessWord-js">KLIK!</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="pageContainer-gameResult gameResult-js hidden ">
+            <div class="pageContainer-gameResult-Lose hidden  gameResultLose-js">
+                <p>Przegrałeś</p>
+                <div class="pageContainer-gameResult-Lose-imgContainer">
+                    <img src="./../img/youLost.png" alt="">
+                </div>
+                <div class="pageContainer-gameResult-Lose-btnContainer">
+                    <button
+                        class="pageContainer-gameResult-Lose-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn2 changeGame-js">Zmień
+                        gre</button>
+                    <button
+                        class="pageContainer-gameResult-Lose-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn1 playAgain-js">Zagraj
+                        ponownie
+                    </button>
+                    <button
+                        class="pageContainer-gameResult-Lose-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn3 newGame-js">Nowy
+                        przeciwnik</button>
+                </div>
+            </div>
+            <div class="pageContainer-gameResult-Draw  gameResultDraw-js hidden">
+                <div class="pageContainer-gameResult--Draw-imgContainer">
+                    <img src="./../img/drew.png" alt="">
+                </div>
+                <div class="pageContainer-gameResult-Draw-btnContainer ">
+                    <button
+                        class="pageContainer-gameResult-Draw-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn2 changeGame-js ">Zmień
+                        gre</button>
+                    <button
+                        class="pageContainer-gameResult-Draw-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn1 playAgain-js">Zagraj
+                        ponownie
+                    </button>
+                    <button
+                        class="pageContainer-gameResult-Draw-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn3 newGame-js">Nowy
+                        przeciwnik</button>
+                </div>
+            </div>
+            <div class="pageContainer-gameResult-Won hidden gameResultWon-js">
+                <div class="pageContainer-gameResult-Won-imgContainer">
+                    <img src="./../img/youWon.png" alt="">
+                </div>
+                <div class="pageContainer-gameResult-btnContainer">
+                    <button
+                        class="pageContainer-gameResult-Won-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn2 changeGame-js">Zmień
+                        gre</button>
+                    <button
+                        class="pageContainer-gameResult-Won-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn1 playAgain-js">Zagraj
+                        ponownie
+                    </button>
+                    <button
+                        class="pageContainer-gameResult-Won-btnContainer-btn pageContainer-gameResult-Won-btnContainer-btn3 newGame-js">Nowy
+                        przeciwnik</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="slowka.js"></script>
+</body>
+
+</html>
