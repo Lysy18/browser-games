@@ -41,18 +41,23 @@ async function generateUniqueRoomName(game) {
     const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
     const noun = nouns[Math.floor(Math.random() * nouns.length)];
 
+    console.log(typeof game);
     uniqueRoomName = `${adjective}-${noun}`;
 
     // Sprawdź, czy nazwa pokoju jest unikalna
     // Jeżeli jest unikalna, dodaj ją do tablicy i zwróć nazwę
-    if ((game = "") && !rooms.includes(uniqueRoomName)) {
+    console.log(game == "TTT", game == "RPS", game == "SLOWKA");
+    if (game == "TTT" && !rooms.includes(uniqueRoomName)) {
       rooms.push(uniqueRoomName);
       return uniqueRoomName;
-    } else if ((game = "RPS") && !roomsRPS.includes(uniqueRoomName)) {
+    } else if (game == "RPS" && !roomsRPS.includes(uniqueRoomName)) {
       roomsRPS.push(uniqueRoomName);
+
       return uniqueRoomName;
-    } else if ((game = "SLOWKO") && !roomsSLOWKO.includes(uniqueRoomName)) {
-      roomsSLOWKO.push(uniqueRoomName);
+    } else if (game == "SLOWKA" && !roomsSLOWKA.includes(uniqueRoomName)) {
+      roomsSLOWKA.push(uniqueRoomName);
+      console.log("slow");
+
       return uniqueRoomName;
     }
 
@@ -76,7 +81,7 @@ io.on("connection", (socket) => {
 
   socket.on("createRoom", async () => {
     const roomWithOnePerson = findRoomWithOccupancy(1);
-
+    console.log(rooms, roomsRPS, roomsSLOWKA, "pokoje");
     if (roomWithOnePerson) {
       // Jeżeli jest pokój z jedną osobą, dołącz do niego i zaktualizuj dane
       socket.join(roomWithOnePerson);
@@ -85,13 +90,13 @@ io.on("connection", (socket) => {
       io.to(roomWithOnePerson).emit("personAmout", "2");
       io.to(roomWithOnePerson).emit("gameStart", "start");
       io.to(roomWithOnePerson).emit("yourOpponentLeftTheGame", "");
-
+      onceAgain = [];
       io.to(roomWithOnePerson).emit("roomId", roomWithOnePerson);
       lastUserMove = socket.id;
       io.to(roomWithOnePerson).emit("userMove", lastUserMove);
     } else {
       // Jeżeli nie ma pokoju z jedną osobą lub są już dwa klienty w pokoju
-      const generatedRoomName = await generateUniqueRoomName();
+      const generatedRoomName = await generateUniqueRoomName("TTT");
 
       if (generatedRoomName) {
         // Jeżeli udało się wygenerować unikalną nazwę pokoju, dodaj do roomsAttributes
@@ -102,13 +107,13 @@ io.on("connection", (socket) => {
         );
         io.to(generatedRoomName).emit("personAmout", "1");
         io.to(generatedRoomName).emit("roomId", generatedRoomName);
+        io.to(generatedRoomName).emit("yourOpponentLeftTheGame", "");
       }
     }
   });
 
   socket.on("move", ({ cellIndex, player, gameRoomId, userId }) => {
     console.log("______________DUPA_____________________");
-    console.log(lastUserMove, socket.id);
     if (lastUserMove == socket.id) {
       // console.log("duplikujesz ruch");
     } else {
@@ -119,6 +124,8 @@ io.on("connection", (socket) => {
         player,
         lastUserMove,
       });
+      io.to(gameRoomId).emit("yourOpponentLeftTheGame", "");
+
       // io.to(roomWithOnePerson).emit("userMove", "your oponent");
     }
     // console.log(cellIndex, player, gameRoomId, userId);
@@ -127,11 +134,8 @@ io.on("connection", (socket) => {
   socket.on("playerResultGameEnd", (data) => {
     console.log("Otrzymane dane od klienta:", data);
     let gameRoomId = data.gameRoomId;
-    let userId = data.userId;
     let result = data.result;
     // if (socket.id != userId) {
-    console.log(`${userId} Wygrał`, result, gameRoomId);
-    console.log(socket.id, userId);
     if (result == "win") {
       io.to(gameRoomId).emit("secondPlayerResult", data);
     } else if (result == "draw") {
@@ -163,7 +167,7 @@ io.on("connection", (socket) => {
     onceAgain.push(userId);
     console.log(`______________${onceAgain}`);
     if (onceAgain.length == 2) {
-      io.to(roomName).emit("playOnceAgain", "yes");
+      io.to(roomName).emit("playOnceAgain", "yes1");
       onceAgain = [];
       console.log("Gra zaczyna się na nowo Ci sami gracze", onceAgain.length);
     }
@@ -222,6 +226,8 @@ io.on("connection", (socket) => {
       io.to(roomWithOnePerson).emit("yourOpponentLeftTheGameRPS", "");
 
       io.to(roomWithOnePerson).emit("roomIdRPS", roomWithOnePerson);
+      onceAgainRPS = [];
+
       // lastUserMove = socket.id;
       // io.to(roomWithOnePerson).emit("userMoveRPS", lastUserMove);
     } else {
@@ -335,8 +341,9 @@ io.on("connection", (socket) => {
       io.to(roomWithOnePerson).emit("roomIdSLOWKA", roomWithOnePerson);
       lastUserMoveSlowka = socket.id;
       io.to(roomWithOnePerson).emit("userMoveSlowka", lastUserMove);
+      onceAgainSLOWKA = [];
 
-      console.log("userMoveSLOWKA", lastUserMoveSlowka);
+      // console.log("userMoveSLOWKA", lastUserMoveSlowka);
       io.to(roomWithOnePerson).emit("userMoveSLOWKA", lastUserMoveSlowka);
     } else {
       // Jeżeli nie ma pokoju z jedną osobą lub są już dwa klienty w pokoju
@@ -454,6 +461,9 @@ io.on("connection", (socket) => {
       );
     }
     console.log(onceAgainSLOWKA.length);
+  });
+  socket.on("disconnect", () => {
+    console.log(socket.id, "discon"); // undefined
   });
 });
 

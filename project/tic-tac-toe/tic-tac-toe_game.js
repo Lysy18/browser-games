@@ -73,7 +73,7 @@ const board = Array.from(Array(3), () => Array(3).fill(""));
 let test = document.querySelector(".test");
 // Funkcja obsługująca kliknięcie w komórkę
 function handleCellClick(event) {
-  if (nextMove.innerText == "Twój ruch!") {
+  if (nextMove.innerText == "Twój ruch!" && event.target.textContent == "") {
     if (moveHistory.length == 0) {
       currentPlayer = "X";
       moveHistory.unshift(currentPlayer);
@@ -265,7 +265,7 @@ $(".playAgain-js").on("click", function (e) {
 
 socket.on("playOnceAgain", (status) => {
   console.log(status, "status");
-  if (status == "yes") {
+  if (status == "yes1") {
     $(".waitForYourOpponent-js").addClass("hidden");
     console.log("playAgain ZJeby");
   }
