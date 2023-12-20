@@ -29,6 +29,9 @@ body {
       position: absolute;
       top: 10px;
       left: 15px;
+      p{
+        margin: 0;
+      }
     }
     .startBtnContainer{
       &-startBtn{
@@ -71,6 +74,9 @@ body {
         align-items: center;
         justify-content: center;
         padding: 20px;
+        .chooseWordForYourOpponent-container-wordDiv-paragraphWord{
+          text-transform: capitalize;
+        }
         .chooseCategoryForYourOpponent, .chooseWordForYourOpponent {
             display: flex;
             flex-direction: column;
@@ -78,7 +84,6 @@ body {
             padding: 20px;
             background-color: var(--color1);
             border-radius: 8px;
-          
             p {
               margin: 10px 0;
               font-size: 18px;
@@ -112,7 +117,11 @@ body {
           .game-container-StartGame {
             display: block; // Aby upewnić się, że kontener gry jest widoczny
             margin: auto; // Centralne umiejscowienie kontenera gry
-          
+            .yourOpponentStatus{
+              position: absolute;
+              top: 10px;
+              right: 15px;
+            }
             .game-container-StartGame-category {
               text-align: center; // Wyśrodkowanie tekstu w kategorii gry
               p {
@@ -122,22 +131,36 @@ body {
           
             .game-container-StartGame-container {
               .game-container-StartGame-container-letter {
-                display: flex; // Rozmieszczenie liter obok siebie
-                justify-content: center; // Wyśrodkowanie liter
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
                 flex-basis: 30px;
-                .game-container-StartGame-container-letters-letter {
-                  background-color: white; 
-                  margin: 5px;
-                  width: 50px;
-                  height: 50px;
-                  border-radius: 15px;
-                  p{
-                    text-align: center;
-                    font-size: 24px;
-                    line-height: 50px;
-                    margin: 0 auto;
+                .game-container-StartGame-container-letters{
+                  // display: flex;
+                  flex-direction: column;
+                  // flex-direction: row;
+                  &-lettersConatainer{
+                    // float: left;
+                    // width: 100%;
+                    display: flex;
+
+                    
+                    &-letter {
+                      background-color: white; 
+                      margin: 5px;
+                      width: 50px;
+                      height: 50px;
+                      border-radius: 15px;
+                      p{
+                        text-align: center;
+                        font-size: 24px;
+                        line-height: 50px;
+                        margin: 0 auto;
+                      }
+                    }
+                    
                   }
-                  
                 }
               }
           

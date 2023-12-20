@@ -29,6 +29,7 @@ let roomsSLOWKA = [];
 let roomsAttributesSLOWKA = {};
 let gameMemorySLOWKA = [];
 let onceAgainSLOWKA = [];
+let lastUserMoveSlowka;
 
 async function generateUniqueRoomName(game) {
   const adjectives = ["Red", "Blue", "Green", "Yellow", "Purple", "Orange"];
@@ -219,8 +220,8 @@ io.on("connection", (socket) => {
       io.to(roomWithOnePerson).emit("yourOpponentLeftTheGameRPS", "");
 
       io.to(roomWithOnePerson).emit("roomIdRPS", roomWithOnePerson);
-      lastUserMove = socket.id;
-      io.to(roomWithOnePerson).emit("userMoveRPS", lastUserMove);
+      // lastUserMove = socket.id;
+      // io.to(roomWithOnePerson).emit("userMoveRPS", lastUserMove);
     } else {
       // Jeżeli nie ma pokoju z jedną osobą lub są już dwa klienty w pokoju
       const generatedRoomName = await generateUniqueRoomName("RPS");
@@ -259,7 +260,7 @@ io.on("connection", (socket) => {
 
   socket.on("userMoveRPS", ({ type, gameRoomId, userId }) => {
     console.log("______________DUPA_____________________");
-    console.log(lastUserMove, socket.id);
+    // console.log(lastUserMove, socket.id);
 
     // io.to(roomWithOnePerson).emit("userMove", "your oponent");
 
@@ -330,8 +331,11 @@ io.on("connection", (socket) => {
       io.to(roomWithOnePerson).emit("yourOpponentLeftTheGameSLOWKA", "");
 
       io.to(roomWithOnePerson).emit("roomIdSLOWKA", roomWithOnePerson);
-      lastUserMove = socket.id;
-      io.to(roomWithOnePerson).emit("userSetSLOWKA", lastUserMove);
+      lastUserMoveSlowka = socket.id;
+      io.to(roomWithOnePerson).emit("userMoveSlowka", lastUserMove);
+
+      console.log("userMoveSLOWKA", lastUserMoveSlowka);
+      io.to(roomWithOnePerson).emit("userMoveSLOWKA", lastUserMoveSlowka);
     } else {
       // Jeżeli nie ma pokoju z jedną osobą lub są już dwa klienty w pokoju
       const generatedRoomName = await generateUniqueRoomName("SLOWKA");
@@ -382,6 +386,62 @@ io.on("connection", (socket) => {
       gameMemorySLOWKA = [];
     }
   });
+
+  socket.on("gameMoveSLOWKA", (data) => {
+    userId = data[2];
+    console.log(userId, "gameMoveSLOWKA");
+    lastUserMoveSlowka = userId;
+    data.push(lastUserMoveSlowka);
+    let gameRoomId = data[1];
+    io.to(gameRoomId).emit("setPercentSLOWKA", data);
+    // io.to(roomWithOnePerson).emit("userMoveSLOWKA", lastUserMoveSlowka);
+
+    console.log(data);
+  });
+
+  socket.on("playerResultGameEndSLOWKA", (data) => {
+    console.log("Otrzymane dane od klienta:", data);
+    let gameRoomId = data.gameRoomId;
+    let userId = data.userId;
+    let result = data.result;
+    console.log(`${userId} Wygrał`, result, gameRoomId);
+    console.log(socket.id, userId);
+    io.to(gameRoomId).emit("secondPlayerResultSLOWKA", data);
+  });
+
+  socket.on("PlayerLeftRoomSLOWKA", (roomName) => {
+    console.log(roomsAttributesSLOWKA[roomName].occupancy, roomName, "test");
+
+    if (roomsAttributesSLOWKA[roomName].occupancy == 2) {
+      socket.leave(roomName);
+      io.to(roomName).emit("personAmoutSLOWKA", "1");
+      io.to(roomName).emit("yourOpponentLeftTheGameSLOWKA", "yes");
+
+      updateOccupancySLOWKA(roomName, 1);
+      console.log(roomsAttributesSLOWKA[roomName].occupancy, roomName);
+    } else {
+      io.to(roomName).emit("personAmoutSLOWKA", "0");
+      updateOccupancySLOWKA(roomName, 0);
+      socket.leave(roomName);
+      console.log(roomsAttributesSLOWKA[roomName].occupancy, roomName);
+    }
+  });
+
+  socket.on("playAgainSLOWKA", ({ roomName, userId }) => {
+    onceAgainSLOWKA.push(userId);
+    console.log(onceAgainSLOWKA, onceAgainSLOWKA.length);
+    console.log(`______________${onceAgainSLOWKA}`);
+    if (onceAgainSLOWKA.length == 2) {
+      io.to(roomName).emit("playOnceAgainSLOWKA", "yes");
+      onceAgainSLOWKA = [];
+      console.log(
+        "Gra zaczyna się na nowo Ci sami gracze",
+        onceAgainSLOWKA.length
+      );
+    }
+    console.log(onceAgainSLOWKA.length);
+  });
+
 });
 
 httpServer.listen(3500, () => {

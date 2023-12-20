@@ -31,6 +31,9 @@ body {
   top: 10px;
   left: 15px;
 }
+.pageContainer .nextMove p {
+  margin: 0;
+}
 .pageContainer .startBtnContainer-startBtn {
   width: 200px;
   height: 160px;
@@ -69,6 +72,9 @@ body {
   justify-content: center;
   padding: 20px;
 }
+.pageContainer .game-container .chooseWordForYourOpponent-container-wordDiv-paragraphWord {
+  text-transform: capitalize;
+}
 .pageContainer .game-container .chooseCategoryForYourOpponent, .pageContainer .game-container .chooseWordForYourOpponent {
   display: flex;
   flex-direction: column;
@@ -106,22 +112,35 @@ body {
   display: block;
   margin: auto;
 }
+.pageContainer .game-container .game-container-StartGame .yourOpponentStatus {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+}
 .pageContainer .game-container .game-container-StartGame .game-container-StartGame-category {
   text-align: center;
 }
 .pageContainer .game-container .game-container-StartGame .game-container-StartGame-container .game-container-StartGame-container-letter {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   flex-basis: 30px;
 }
-.pageContainer .game-container .game-container-StartGame .game-container-StartGame-container .game-container-StartGame-container-letter .game-container-StartGame-container-letters-letter {
+.pageContainer .game-container .game-container-StartGame .game-container-StartGame-container .game-container-StartGame-container-letter .game-container-StartGame-container-letters {
+  flex-direction: column;
+}
+.pageContainer .game-container .game-container-StartGame .game-container-StartGame-container .game-container-StartGame-container-letter .game-container-StartGame-container-letters-lettersConatainer {
+  display: flex;
+}
+.pageContainer .game-container .game-container-StartGame .game-container-StartGame-container .game-container-StartGame-container-letter .game-container-StartGame-container-letters-lettersConatainer-letter {
   background-color: white;
   margin: 5px;
   width: 50px;
   height: 50px;
   border-radius: 15px;
 }
-.pageContainer .game-container .game-container-StartGame .game-container-StartGame-container .game-container-StartGame-container-letter .game-container-StartGame-container-letters-letter p {
+.pageContainer .game-container .game-container-StartGame .game-container-StartGame-container .game-container-StartGame-container-letter .game-container-StartGame-container-letters-lettersConatainer-letter p {
   text-align: center;
   font-size: 24px;
   line-height: 50px;

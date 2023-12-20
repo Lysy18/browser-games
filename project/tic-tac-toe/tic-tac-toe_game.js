@@ -195,7 +195,6 @@ cells.forEach((cell) => cell.addEventListener("click", handleCellClick));
 // Obsługa ruchu przeciwnika
 socket.on("opponentMove", ({ cellIndex, player, lastUserMove }) => {
   // Zaktualizuj planszę i interfejs na podstawie otrzymanego ruchu przeciwnika
-
   board[Math.floor(cellIndex / 3)][cellIndex % 3] = player;
   cells[cellIndex].textContent = player;
   if (player == "X") {
