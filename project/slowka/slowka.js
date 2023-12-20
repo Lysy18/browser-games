@@ -262,9 +262,9 @@ $(".tryGuessWord-js").on("click", function (e) {
     console.log("hehjhebsdjhbfjhb______DUUPA");
     let yourProposition = guessWordInput.value.replace(/ /g, "");
     let x = 0;
+    let yourWord = yourWordS.replace(/ /g, "");
     if (yourProposition != "") {
       let yourPropositionArr = yourProposition.toLowerCase().split("");
-      let yourWord = yourWordS.replace(/ /g, "");
       let yourWordArr = yourWord.toLowerCase().split("");
       let pElementAll = document.querySelectorAll(".pElement-js");
       nextMove.innerText = "Poczekaj na ruch twojego przeciwnika";
@@ -285,7 +285,7 @@ $(".tryGuessWord-js").on("click", function (e) {
     }
 
     guessWordInput.value = "";
-    let percent = parseInt((x / yourWordS.length) * 100);
+    let percent = parseInt((x / yourWord.length) * 100);
     console.log(percent);
     let gameRoomId = roomId[0];
     let userId = socket.id;
@@ -299,6 +299,7 @@ $(".tryGuessWord-js").on("click", function (e) {
       });
       gameResultWon.classList.remove("hidden");
       nextMove.classList.add("hidden");
+      console.log("2");
     }
     socket.emit("gameMoveSLOWKA", data);
   }
@@ -329,6 +330,8 @@ socket.on("secondPlayerResultSLOWKA", (data) => {
   if (winnerUserId != socket.id && result == "win") {
     gameResultLose.classList.remove("hidden");
     nextMove.classList.add("hidden");
+    console.log("1");
+    $(".yourOpponentStatus-js")[0].textContent = `0%`;
   }
 });
 
@@ -363,6 +366,7 @@ $(".playAgain-js").on("click", function (e) {
     $(".chooseCategoryForYourOpponent-js").removeClass("hidden");
     $(".game-container-StartGame-js").addClass("hidden");
     $(".game-container-StartGame-container-letter-js")[0].textContent = [];
+    $(".yourOpponentStatus-js")[0].textContent = `0%`;
   }
   console.log(personAmout);
 });

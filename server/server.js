@@ -44,13 +44,15 @@ async function generateUniqueRoomName(game) {
     uniqueRoomName = `${adjective}-${noun}`;
 
     // Sprawdź, czy nazwa pokoju jest unikalna
-    if (!rooms.includes(uniqueRoomName)) {
-      // Jeżeli jest unikalna, dodaj ją do tablicy i zwróć nazwę
-      if ((game = "")) {
-        rooms.push(uniqueRoomName);
-      } else if ((game = "RPS")) {
-        roomsRPS.push(uniqueRoomName);
-      }
+    // Jeżeli jest unikalna, dodaj ją do tablicy i zwróć nazwę
+    if ((game = "") && !rooms.includes(uniqueRoomName)) {
+      rooms.push(uniqueRoomName);
+      return uniqueRoomName;
+    } else if ((game = "RPS") && !roomsRPS.includes(uniqueRoomName)) {
+      roomsRPS.push(uniqueRoomName);
+      return uniqueRoomName;
+    } else if ((game = "SLOWKO") && !roomsSLOWKO.includes(uniqueRoomName)) {
+      roomsSLOWKO.push(uniqueRoomName);
       return uniqueRoomName;
     }
 
@@ -374,17 +376,29 @@ io.on("connection", (socket) => {
 
   socket.on("userSetSLOWKA", (data) => {
     console.log("______________DUPA_____________________");
-    // console.log(lastUserMove, socket.id);
-
-    // io.to(roomWithOnePerson).emit("userMove", "your oponent");
     let gameRoomId = data[2];
-    gameMemorySLOWKA.push(data);
-    if (gameMemorySLOWKA.length == 1) {
+    let userId = data[3];
+    console.log(gameMemorySLOWKA);
+
+    if (gameMemorySLOWKA.length == 0) {
+      console.log("userId znajduje się w tablicy");
+      gameMemorySLOWKA.push(data);
       io.to(gameRoomId).emit("startGameSLOWKA", gameMemorySLOWKA);
-    } else if (gameMemorySLOWKA.length > 1) {
-      io.to(gameRoomId).emit("startGameSLOWKA", gameMemorySLOWKA);
-      gameMemorySLOWKA = [];
+    } else if (gameMemorySLOWKA.length == 1) {
+      let userChoseWordId = gameMemorySLOWKA[0];
+      if (userId != userChoseWordId[3]) {
+        gameMemorySLOWKA.push(data);
+        io.to(gameRoomId).emit("startGameSLOWKA", gameMemorySLOWKA);
+        gameMemorySLOWKA = [];
+      }
     }
+
+    // if (gameMemorySLOWKA.length == 1) {
+    //   io.to(gameRoomId).emit("startGameSLOWKA", gameMemorySLOWKA);
+    // } else if (gameMemorySLOWKA.length > 1) {
+    //   io.to(gameRoomId).emit("startGameSLOWKA", gameMemorySLOWKA);
+    //   gameMemorySLOWKA = [];
+    // }
   });
 
   socket.on("gameMoveSLOWKA", (data) => {
@@ -394,7 +408,7 @@ io.on("connection", (socket) => {
     data.push(lastUserMoveSlowka);
     let gameRoomId = data[1];
     io.to(gameRoomId).emit("setPercentSLOWKA", data);
-    // io.to(roomWithOnePerson).emit("userMoveSLOWKA", lastUserMoveSlowka);
+    // io.to(gameRoomId).emit("userMoveSLOWKA", lastUserMoveSlowka);
 
     console.log(data);
   });
@@ -441,7 +455,6 @@ io.on("connection", (socket) => {
     }
     console.log(onceAgainSLOWKA.length);
   });
-
 });
 
 httpServer.listen(3500, () => {
