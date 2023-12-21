@@ -149,6 +149,8 @@ socket.on("gameResult", (data) => {
         userId: userId,
         result: "win",
       });
+      socket.emit("addWin", "RPS");
+
       gameResultWon.classList.remove("hidden");
     } else {
       $(".result-js").removeClass("hidden");

@@ -10,7 +10,16 @@ body {
     display: none !important;
     visibility: hidden !important;
 }
-
+:root{
+  --color0:#f3f9f8;
+  --color1:#e7edec;
+  --color2:#939f9f;
+  --color3:#666e70;
+  --color4:#454a4c;
+  --color5:#322f31;
+  --colorBTN:#007bff;
+  --colorBTNHover: #0056b3;
+}
   .pageContainer{
    
     display: flex;
@@ -24,6 +33,22 @@ body {
       &-startBtn{
         width: 200px;
         height: 160px;
+        background-color: var(--colorBTN);
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: none;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        box-shadow: 0 1.5rem 3rem -0.75rem hsla(0, 0%, 0%, 0.35);
+        &:hover{
+          background-color: var(--colorBTNHover);
+        }
       }
     }
     .pageBlocker{

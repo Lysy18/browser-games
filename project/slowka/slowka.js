@@ -297,6 +297,8 @@ $(".tryGuessWord-js").on("click", function (e) {
         userId: userId,
         result: "win",
       });
+      socket.emit("addWin", "SLOWKA");
+
       gameResultWon.classList.remove("hidden");
       nextMove.classList.add("hidden");
       console.log("2");

@@ -9,6 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"
         integrity="sha512-Xm9qbB6Pu06k3PUwPj785dyTl6oHxgsv9nHp7ej7nCpAqGZT3OZpsELuCYX05DdonFpTlBpXMOxjavIAIUwr0w=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="./../../server/server.js">
     <link rel="stylesheet" href="style.css">
 
 </head>
@@ -18,31 +19,51 @@
         <div class="container-sliderWrapper">
             <div class="container-sliderWrapper-slider">
                 <div id="slide-1">
-                    <div class="container-sliderWrapper-slider-rectangle"><a
-                            href="./../tic-tac-toe/tic-tac-toe_game.html">
-                            <img src="./../choose-game/img/ticTacToe.png" alt="">
-                        </a>
-                    </div>
+
                     <div class="container-sliderWrapper-slider-rectangle"><a href="">
+                            <div class="small-element bestGame-js hidden" data-game="-">
+                                Polecamy!
+                            </div>
                             <img src="./../choose-game/img/chv2.png" alt="">
                         </a>
                     </div>
                     <div class="container-sliderWrapper-slider-rectangle"><a
                             href="./../rock-paper-scissors/rock-paper-scissors.html">
+                            <div class="small-element bestGame-js hidden" data-game="RPS">
+                                Polecamy!
+                            </div>
                             <img src="./../choose-game/img/RPS.png" alt="Papier kamien nozyce">
                         </a>
                     </div>
                     <div class="container-sliderWrapper-slider-rectangle"><a href="./../talking/talking.html">
                             <img src="./../choose-game/img/talk.png" alt="">
+                            <div class="small-element bestGame-js hidden" data-game="talk">
+                                Polecamy!
+                            </div>
                         </a></div>
-                    <div class="container-sliderWrapper-slider-rectangle"><a href="./../slowka/slowka.html">
-                            <img src="./../choose-game/img/slowka.png" alt="">
+                    <div class="container-sliderWrapper-slider-rectangle">
+                        <a href="./../tic-tac-toe/tic-tac-toe_game.html">
+                            <div class="small-element bestGame-js hidden" data-game="TTT">
+                                Polecamy!
+                            </div>
+                            <img src="./../choose-game/img/ticTacToe.png" alt="">
                         </a>
                     </div>
                     <div class="container-sliderWrapper-slider-rectangle"><a href="">
+                            <div class="small-element bestGame-js hidden" data-game="talk">
+                                Polecamy!
+                            </div>
                             <img src="./../choose-game/img/talk.png" alt="">
                         </a>
                     </div>
+                    <div class="container-sliderWrapper-slider-rectangle"><a href="./../slowka/slowka.html">
+                            <img src="./../choose-game/img/slowka.png" alt="">
+                            <div class="small-element bestGame-js hidden" data-game="SLOWKA">
+                                Polecamy!
+                            </div>
+                        </a>
+                    </div>
+
 
                 </div>
                 <div id="slide-2">

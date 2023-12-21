@@ -122,6 +122,7 @@ function handleCellClick(event) {
           userId: userId,
           result: "win",
         });
+        socket.emit("addWin", "TTT");
         gameResultWon.classList.remove("hidden");
       } else if (isBoardFull()) {
         socket.emit("playerResultGameEnd", {
@@ -129,6 +130,7 @@ function handleCellClick(event) {
           userId: userId,
           result: "draw",
         });
+        socket.emit("addWin", "TTT");
 
         // Sprawdź, czy plansza jest pełna (remis)
         // alert("Remis!");
@@ -283,4 +285,7 @@ $(".changeGame-js").on("click", function (e) {
 $(".newGame-js").on("click", function (e) {
   socket.emit("PlayerLeftRoom", roomId[0]);
   location.reload();
+});
+$(".test-js").on("click", function (e) {
+  socket.emit("addTest", "TTT");
 });

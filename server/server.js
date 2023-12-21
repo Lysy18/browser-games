@@ -76,9 +76,72 @@ const io = new Server(httpServer, {
   maxDisconnectionDuration: 2 * 60 * 1000,
   skipMiddlewares: true,
 });
+async function incrementGameAmount(gameName) {
+  // Najpierw sprawdzamy, czy istnieje wpis dla podanej nazwy gry
+  let { data, error } = await supabase
+    .from("clients")
+    .select("game_amount")
+    .eq("game_name", gameName);
+
+  // Obsługa błędu przy pobieraniu danych
+  if (error) {
+    console.error("Błąd przy pobieraniu danych:", error);
+    return;
+  }
+  console.log(data);
+  // Jeśli nie ma takiej gry, możemy wyjść z funkcji lub dodać nowy wpis
+  if (data.length === 0) {
+    console.log("Nie znaleziono gry o nazwie:", gameName);
+    return;
+  }
+
+  // Zwiększenie wartości game_amount o 1 dla wszystkich znalezionych wierszy
+  const { error: updateError } = await supabase
+    .from("clients")
+    .update({ game_amount: data[0].game_amount + 1 })
+    .eq("game_name", gameName);
+
+  // Obsługa błędu przy aktualizacji danych
+  if (updateError) {
+    console.error("Błąd przy aktualizacji danych:", updateError);
+  } else {
+    console.log("Pomyślnie zaktualizowano game_amount dla", gameName);
+  }
+}
+
+async function getClients() {
+  try {
+    let { data, error } = await supabase.from("clients").select("*");
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Błąd podczas pobierania danych:", error);
+    return null;
+  }
+}
+
 io.on("connection", (socket) => {
   console.log(`User: ${socket.id} connected`);
 
+  socket.on("addWin", (game) => {
+    incrementGameAmount(game);
+  });
+
+  async function main() {
+    try {
+      const clients = await getClients();
+      io.emit("bestGame", clients);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  main();
+  //  Lysy ttt
   socket.on("createRoom", async () => {
     const roomWithOnePerson = findRoomWithOccupancy(1);
     console.log(rooms, roomsRPS, roomsSLOWKA, "pokoje");
