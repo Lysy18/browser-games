@@ -39,6 +39,7 @@
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   overflow: hidden;
+  border-radius: 10px;
 }
 .container-sliderWrapper-slider #slide-1, .container-sliderWrapper-slider #slide-2, .container-sliderWrapper-slider #slide-3 {
   flex: 1 0 100%;

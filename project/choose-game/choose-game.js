@@ -1,33 +1,31 @@
 const socket = io("ws://localhost:3500");
 let bestGame = document.querySelectorAll(".bestGame-js");
 
-function znajdzNajwiekszeIndeksy(tablica) {
-  if (!Array.isArray(tablica) || tablica.length === 0) {
-    return []; // Zwróć pustą tablicę, jeśli tablica jest pusta lub nie jest tablicą.
+function findIndex(arr) {
+  if (!Array.isArray(arr) || arr.length === 0) {
+    return []; 
   }
 
-  let najwiekszaWartosc = tablica[0].game_amount;
-  let indeksyNajwiekszych = [0];
+  let biggest = arr[0].game_amount;
+  let num = [0];
 
-  for (let i = 1; i < tablica.length; i++) {
-    const aktualnaWartosc = tablica[i].game_amount;
+  for (let i = 1; i < arr.length; i++) {
+    const currentValue = arr[i].game_amount;
 
-    if (aktualnaWartosc > najwiekszaWartosc) {
-      najwiekszaWartosc = aktualnaWartosc;
-      indeksyNajwiekszych = [i];
-    } else if (aktualnaWartosc === najwiekszaWartosc) {
-      indeksyNajwiekszych.push(i);
+    if (currentValue > biggest) {
+      biggest = currentValue;
+      num = [i];
+    } else if (currentValue === biggest) {
+      num.push(i);
     }
   }
 
-  return indeksyNajwiekszych;
+  return num;
 }
 
 socket.on("bestGame", (data) => {
-  console.log(data);
-  let index = znajdzNajwiekszeIndeksy(data);
+  let index = findIndex(data);
   index.sort((a, b) => a - b);
-  console.log(index);
   for (const element of index) {
     if (typeof element === "number" && !isNaN(element)) {
       let game = data[element].game_name;
@@ -39,9 +37,6 @@ socket.on("bestGame", (data) => {
           bestGame[i].classList.remove("hidden");
         }
       }
-      // Wykonaj operacje tylko dla liczb
-      console.log(`To jest liczba: ${element}`);
     }
   }
-  //   for(let i=)
 });

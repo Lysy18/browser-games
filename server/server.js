@@ -1,6 +1,5 @@
 const http = require("http");
 const { Server } = require("socket.io");
-const { join } = require("node:path");
 
 const httpServer = http.createServer();
 const { createClient } = require("@supabase/supabase-js");
@@ -79,7 +78,7 @@ const io = new Server(httpServer, {
 async function incrementGameAmount(gameName) {
   // Najpierw sprawdzamy, czy istnieje wpis dla podanej nazwy gry
   let { data, error } = await supabase
-    .from("clients")
+    .from("games")
     .select("game_amount")
     .eq("game_name", gameName);
 
@@ -97,7 +96,7 @@ async function incrementGameAmount(gameName) {
 
   // Zwiększenie wartości game_amount o 1 dla wszystkich znalezionych wierszy
   const { error: updateError } = await supabase
-    .from("clients")
+    .from("games")
     .update({ game_amount: data[0].game_amount + 1 })
     .eq("game_name", gameName);
 
@@ -109,9 +108,9 @@ async function incrementGameAmount(gameName) {
   }
 }
 
-async function getClients() {
+async function getGames() {
   try {
-    let { data, error } = await supabase.from("clients").select("*");
+    let { data, error } = await supabase.from("games").select("*");
 
     if (error) {
       throw error;
@@ -133,8 +132,8 @@ io.on("connection", (socket) => {
 
   async function main() {
     try {
-      const clients = await getClients();
-      io.emit("bestGame", clients);
+      const games = await getGames();
+      io.emit("bestGame", games);
     } catch (error) {
       console.error(error);
     }
@@ -176,34 +175,28 @@ io.on("connection", (socket) => {
   });
 
   socket.on("move", ({ cellIndex, player, gameRoomId, userId }) => {
-    console.log("______________DUPA_____________________");
-    if (lastUserMove == socket.id) {
-      // console.log("duplikujesz ruch");
-    } else {
-      // console.log("good move broooo");
+    console.log("______________DUPA_____________________", player);
+
+    if (lastUserMove != socket.id) {
       lastUserMove = userId;
       io.to(gameRoomId).emit("opponentMove", {
         cellIndex,
         player,
         lastUserMove,
       });
-      io.to(gameRoomId).emit("yourOpponentLeftTheGame", "");
-
-      // io.to(roomWithOnePerson).emit("userMove", "your oponent");
     }
-    // console.log(cellIndex, player, gameRoomId, userId);
   });
 
   socket.on("playerResultGameEnd", (data) => {
     console.log("Otrzymane dane od klienta:", data);
     let gameRoomId = data.gameRoomId;
-    let result = data.result;
-    // if (socket.id != userId) {
-    if (result == "win") {
-      io.to(gameRoomId).emit("secondPlayerResult", data);
-    } else if (result == "draw") {
-      io.to(gameRoomId).emit("secondPlayerResult", data);
-    }
+    // let result = data.result;
+    io.to(gameRoomId).emit("secondPlayerResult", data);
+
+    // if (result == "win") {
+    //   io.to(gameRoomId).emit("secondPlayerResult", data);
+    // } else if (result == "draw") {
+    //   io.to(gameRoomId).emit("secondPlayerResult", data);
     // }
   });
 
@@ -214,7 +207,6 @@ io.on("connection", (socket) => {
       socket.leave(roomName);
       io.to(roomName).emit("personAmout", "1");
       io.to(roomName).emit("yourOpponentLeftTheGame", "yes");
-
       updateOccupancy(roomName, 1);
       console.log(roomsAttributes[roomName].occupancy, roomName);
     } else {

@@ -6,6 +6,9 @@ body {
     margin: 0;
     background-color: #f4f4f4;
   }
+//   font-family: 'Oswald', sans-serif;
+// font-family: 'Raleway', sans-serif;
+// font-family: 'Roboto', sans-serif;
 .hidden{
     display: none !important;
     visibility: hidden !important;
@@ -21,14 +24,18 @@ body {
   --colorBTNHover: #0056b3;
 }
   .pageContainer{
+font-family: 'Raleway', sans-serif;
    
     display: flex;
     // flex-direction: column;
-    // .nextMove{
-    //   position: absolute;
-    //   top: 100px;
-    //   right: 0px;
-    // }
+    .nextMove{
+      p{
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        margin: 0 0 10px 0;
+      }
+
+    }
     .startBtnContainer{
       &-startBtn{
         width: 200px;
@@ -63,6 +70,7 @@ body {
       bottom: 0;
       &-waitingRoom{
         color: rgb(252, 250, 250);
+        font-size: 24px;
         position: absolute;
         transform: translate(-50%,-50%);
         top: 50%;
@@ -95,6 +103,8 @@ body {
         }
         
         .cell {
+            font-family: 'Raleway', sans-serif;
+
             width: 100px;
             height: 100px;
             background-color: #fff;
@@ -102,8 +112,11 @@ body {
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 24px;
+            font-size: 38px;
+            font-weight: 400;
             cursor: pointer;
+            border-radius: 5px;
+            margin-bottom: 5px;
             
             &:hover {
                 background-color: #f0f0f0;

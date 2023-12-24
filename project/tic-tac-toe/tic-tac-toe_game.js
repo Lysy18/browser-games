@@ -74,12 +74,12 @@ let test = document.querySelector(".test");
 // Funkcja obsługująca kliknięcie w komórkę
 function handleCellClick(event) {
   if (nextMove.innerText == "Twój ruch!" && event.target.textContent == "") {
-    if (moveHistory.length == 0) {
+    if (moveHistory.length == 'O') {
       currentPlayer = "X";
       moveHistory.unshift(currentPlayer);
     } else {
       if (moveHistory[0] == "X") {
-        currentPlayer = "0";
+        currentPlayer = "O";
         moveHistory.unshift(currentPlayer);
       } else {
         currentPlayer = "X";
