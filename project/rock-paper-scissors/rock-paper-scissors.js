@@ -14,7 +14,7 @@ let playAgain = document.querySelector(".playAgain-js");
 let changeGame = document.querySelector(".changeGame-js");
 
 let gameAction = document.querySelector(".gameAction-js");
-let amountWin = 1;
+let amountWin = 3;
 const createRoomFun = () => {
   socket.emit("createRoomRPS", "tak");
   socket.on("personAmoutRPS", (receivedPersonAmout) => {

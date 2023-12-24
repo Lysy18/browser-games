@@ -4,7 +4,7 @@ body {
   align-items: center;
   height: 100vh;
   margin: 0;
-  background-color: #f4f4f4;
+  background-color: var(--color0);
 }
 
 .hidden {
@@ -104,6 +104,7 @@ body {
   cursor: pointer;
   border-radius: 5px;
   margin-bottom: 5px;
+  transition: 0.3s;
 }
 .pageContainer .cell:hover {
   background-color: #f0f0f0;

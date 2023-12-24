@@ -4,7 +4,7 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #f4f4f4;
+    background-color: var(--color0);
   }
 //   font-family: 'Oswald', sans-serif;
 // font-family: 'Raleway', sans-serif;
@@ -117,6 +117,7 @@ font-family: 'Raleway', sans-serif;
             cursor: pointer;
             border-radius: 5px;
             margin-bottom: 5px;
+            transition: 0.3s;
             
             &:hover {
                 background-color: #f0f0f0;
