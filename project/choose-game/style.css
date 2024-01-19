@@ -80,6 +80,7 @@
   right: 55px;
   top: 179px;
   opacity: 0;
+  font-family: "Roboto", sans-serif;
 }
 .container-sliderWrapper-slider #slide-1 .container-sliderWrapper-slider-rectangle a, .container-sliderWrapper-slider #slide-2 .container-sliderWrapper-slider-rectangle a, .container-sliderWrapper-slider #slide-3 .container-sliderWrapper-slider-rectangle a {
   position: absolute;
