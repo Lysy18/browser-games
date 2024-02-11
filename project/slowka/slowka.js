@@ -95,7 +95,6 @@ const createRoomFun = () => {
         waitingRoom.classList.remove("hidden");
         gameContainer.classList.remove("hidden");
       }
-      console.log("jeden gracz");
       if (!gameResult.classList.contains("hidden")) {
         $(".playAgain-js").addClass("onePlayer");
       }
@@ -122,7 +121,6 @@ socket.on("roomIdSLOWKA", (receivedRoomId) => {
 });
 
 socket.on("userMoveSLOWKA", (userId) => {
-  console.log(userId, "tetetetett");
   if (userId != socket.id) {
     nextMove.innerText = "Twój ruch!";
     lastUserMoveSlowka = userId;
@@ -135,7 +133,6 @@ socket.on("personAmoutSLOWKA", (receivedPersonAmout) => {
     btnStartGame.classList.add("hidden");
     // nextMove.classList.remove("hidden");
     personAmout = "2";
-    console.log("dwa gracz", socket.id);
     lastUserMoveSlowka = socket.id;
 
     $(".amountWin-js").addClass("hidden");
@@ -200,7 +197,6 @@ $(".wordGame-js").on("click", function (e) {
 let yourWordS;
 let opponentWordS;
 socket.on("startGameSLOWKA", (data) => {
-  console.log(data);
   if (data.length == 1) {
   } else if (data.length == 2) {
     nextMove.classList.remove("hidden");
@@ -209,21 +205,17 @@ socket.on("startGameSLOWKA", (data) => {
     let P2 = data[1];
     let yourWord;
     let opponentWord;
-    console.log(P1, P2);
     if (P1[3] != socket.id) {
       yourWord = P1;
       opponentWord = P2;
-      // console.log(yourMove[1], opponentMove[1]);
     } else if (P2[3] != socket.id) {
       yourWord = P2;
       opponentWord = P1;
     }
     yourWordS = yourWord[1];
     opponentWordS = opponentWord[1];
-    console.log("yourWordS:", yourWordS, opponentWordS);
     $(".chooseWordForYourOpponent-js").addClass("hidden");
     $(".game-container-StartGame-js").removeClass("hidden");
-    console.log(yourWord[0], "ykndj");
     if (yourWord[0] == "colors") {
       $(".categoryName-js")[0].textContent = "Kolor";
     } else if (yourWord[0] == "animals") {
@@ -259,8 +251,6 @@ socket.on("startGameSLOWKA", (data) => {
 
 $(".tryGuessWord-js").on("click", function (e) {
   if (lastUserMoveSlowka != socket.id) {
-    console.log(lastUserMoveSlowka, socket.id);
-    console.log("hehjhebsdjhbfjhb______DUUPA");
     let yourProposition = guessWordInput.value.replace(/ /g, "");
     let x = 0;
     let yourWord = yourWordS.replace(/ /g, "");
@@ -269,15 +259,12 @@ $(".tryGuessWord-js").on("click", function (e) {
       let yourWordArr = yourWord.toLowerCase().split("");
       let pElementAll = document.querySelectorAll(".pElement-js");
       nextMove.innerText = "Poczekaj na ruch twojego przeciwnika";
-      // console.log(yourPropositionArr);
-      // console.log(yourWordArr);
       for (let i = 0; i < yourPropositionArr.length; i++) {
         if (
           yourPropositionArr[i] == yourWordArr[i] &&
           yourPropositionArr[i] != " "
         ) {
           pElementAll[i].textContent = yourPropositionArr[i];
-          // console.log(yourPropositionArr[i], pElementAll[i], "lit", i);
           x++;
         } else if (yourPropositionArr[i] == " ") {
           continue;
@@ -287,12 +274,10 @@ $(".tryGuessWord-js").on("click", function (e) {
 
     guessWordInput.value = "";
     let percent = parseInt((x / yourWord.length) * 100);
-    console.log(percent);
     let gameRoomId = roomId[0];
     let userId = socket.id;
     data = [percent, gameRoomId, userId];
     if (percent == "100") {
-      console.log("gra skonczona");
       socket.emit("playerResultGameEndSLOWKA", {
         gameRoomId: gameRoomId,
         userId: userId,
@@ -302,14 +287,12 @@ $(".tryGuessWord-js").on("click", function (e) {
 
       gameResultWon.classList.remove("hidden");
       nextMove.classList.add("hidden");
-      console.log("2");
     }
     socket.emit("gameMoveSLOWKA", data);
   }
 });
 
 socket.on("setPercentSLOWKA", (data) => {
-  console.log(data);
   let userId = data[2];
   let opponentPercent = data[0];
   if (socket.id != userId) {
@@ -326,24 +309,20 @@ socket.on("secondPlayerResultSLOWKA", (data) => {
   let gameRoomId = data.gameRoomId;
   let winnerUserId = data.userId;
   let result = data.result;
-  console.log(gameRoomId, winnerUserId, result);
   if (gameResult.classList.contains("hidden")) {
     gameResult.classList.remove("hidden");
   }
   if (winnerUserId != socket.id && result == "win") {
     gameResultLose.classList.remove("hidden");
     nextMove.classList.add("hidden");
-    console.log("1");
     $(".yourOpponentStatus-js")[0].textContent = `0%`;
   }
 });
 
 $(".playAgain-js").on("click", function (e) {
   if (!$(".playAgain-js").hasClass("onePlayer")) {
-    console.log(!$(".playAgain-js").hasClass("onePlayer"));
     let gameRectangle = $(e.currentTarget).parent().parent();
     gameRectangle.addClass("hidden");
-    console.log(gameRectangle);
     gameResult.classList.add("hidden");
     moveHistory = [];
     const userId = socket.id;
@@ -352,7 +331,6 @@ $(".playAgain-js").on("click", function (e) {
       userId,
     });
     socket.on("yourOpponentLeftTheGameSLOWKA", (status) => {
-      console.log(status, "status");
       if (status == "yes") {
         if (gameResult.classList.contains("hidden")) {
           $(".yourOpponentLeftTheGame-js").removeClass("hidden");
@@ -371,21 +349,17 @@ $(".playAgain-js").on("click", function (e) {
     $(".game-container-StartGame-container-letter-js")[0].textContent = [];
     $(".yourOpponentStatus-js")[0].textContent = `0%`;
   }
-  console.log(personAmout);
 });
 
 socket.on("playOnceAgainSLOWKA", (status) => {
-  console.log(status, "status");
   if (status == "yes") {
     $(".waitForYourOpponent-js").addClass("hidden");
-    console.log("playAgain ZJeby");
   }
 
   // Tutaj możesz wykonywać inne działania związane z otrzymanym ID pokoju
 });
 
 $(".changeGame-js").on("click", function (e) {
-  console.log("changeGame", roomId[0]);
   socket.emit("PlayerLeftRoomSLOWKA", roomId[0]);
   window.location.href = "./../choose-game/index.html";
 });

@@ -21,7 +21,6 @@ const createRoomFun = () => {
         waitingRoom.classList.remove("hidden");
         gameContainer.classList.remove("hidden");
       }
-      console.log("jeden gracz");
       if (!gameResult.classList.contains("hidden")) {
         $(".playAgain-js").addClass("onePlayer");
       }
@@ -57,7 +56,6 @@ socket.on("personAmout", (receivedPersonAmout) => {
     btnStartGame.classList.add("hidden");
     nextMove.classList.remove("hidden");
     personAmout = "2";
-    console.log("dwa gracz");
   }
 });
 
@@ -74,7 +72,7 @@ let test = document.querySelector(".test");
 // Funkcja obsługująca kliknięcie w komórkę
 function handleCellClick(event) {
   if (nextMove.innerText == "Twój ruch!" && event.target.textContent == "") {
-    if (moveHistory.length == 'O') {
+    if (moveHistory.length == "O") {
       currentPlayer = "X";
       moveHistory.unshift(currentPlayer);
     } else {
@@ -88,19 +86,8 @@ function handleCellClick(event) {
     }
     nextMove.innerText = "Poczekaj na ruch twojego przeciwnika";
 
-    // if (nextMove.innerText == "Twój ruch") {
-    //   console.log("1Move");
-    // } else if ((nextMove.innerText = "Poczekaj na ruch twojego przeciwnika")) {
-    //   nextMove.innerText = "Twój ruch";
-    //   console.log("2Move");
-    // }
-
-    // currentPlayer = currentPlayer === "X" ? "O" : "X";
-    // currentPlayer = currentPlayer === "X" ? "O" : "X";
-
     const cellIndex = event.target.dataset.index;
     let gameRoomId = roomId[0];
-    // Sprawdź, czy komórka jest pusta
     if (board[Math.floor(cellIndex / 3)][cellIndex % 3] === "") {
       // Zaktualizuj planszę i wyślij informację o ruchu do serwera
       board[Math.floor(cellIndex / 3)][cellIndex % 3] = currentPlayer;
@@ -112,10 +99,8 @@ function handleCellClick(event) {
         userId,
       });
 
-      // Zaktualizuj interfejs gracza
       event.target.textContent = currentPlayer;
 
-      // Sprawdź, czy jest zwycięzca
       if (checkWinner()) {
         socket.emit("playerResultGameEnd", {
           gameRoomId: gameRoomId,
@@ -131,15 +116,8 @@ function handleCellClick(event) {
           result: "draw",
         });
         socket.emit("addWin", "TTT");
-
-        // Sprawdź, czy plansza jest pełna (remis)
-        // alert("Remis!");
-        // resetGame();
-      } else {
-        // Zmień aktualnego gracza
       }
     }
-  } else {
   }
 }
 
@@ -215,10 +193,8 @@ socket.on("opponentMove", ({ cellIndex, player, lastUserMove }) => {
 
 //obsługa końca gry u opponenta
 socket.on("secondPlayerResult", (data) => {
-  let gameRoomId = data.gameRoomId;
   let winnerUserId = data.userId;
   let result = data.result;
-  console.log(gameRoomId, winnerUserId, result);
   if (gameResult.classList.contains("hidden")) {
     gameResult.classList.remove("hidden");
   }
@@ -234,11 +210,9 @@ socket.on("secondPlayerResult", (data) => {
 
 $(".playAgain-js").on("click", function (e) {
   if (!$(".playAgain-js").hasClass("onePlayer")) {
-    console.log(!$(".playAgain-js").hasClass("onePlayer"));
     resetGame();
     let gameRectangle = $(e.currentTarget).parent().parent();
     gameRectangle.addClass("hidden");
-    console.log();
     gameResult.classList.add("hidden");
     moveHistory = [];
     const userId = socket.id;
@@ -247,7 +221,6 @@ $(".playAgain-js").on("click", function (e) {
       userId,
     });
     socket.on("yourOpponentLeftTheGame", (status) => {
-      console.log(status, "status");
       if (status == "yes") {
         if (gameResult.classList.contains("hidden")) {
           $(".yourOpponentLeftTheGame-js").removeClass("hidden");
@@ -262,14 +235,11 @@ $(".playAgain-js").on("click", function (e) {
     });
     $(".waitForYourOpponent-js").removeClass("hidden");
   }
-  console.log(personAmout);
 });
 
 socket.on("playOnceAgain", (status) => {
-  console.log(status, "status");
   if (status == "yes1") {
     $(".waitForYourOpponent-js").addClass("hidden");
-    console.log("playAgain ZJeby");
   }
 
   // Tutaj możesz wykonywać inne działania związane z otrzymanym ID pokoju
@@ -277,7 +247,6 @@ socket.on("playOnceAgain", (status) => {
 
 $(".changeGame-js").on("click", function (e) {
   resetGame();
-  console.log("changeGame", roomId[0]);
   socket.emit("PlayerLeftRoom", roomId[0]);
   window.location.href = "./../choose-game/index.html";
 });

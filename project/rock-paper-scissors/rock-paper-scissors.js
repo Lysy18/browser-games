@@ -24,7 +24,6 @@ const createRoomFun = () => {
         waitingRoom.classList.remove("hidden");
         gameContainer.classList.remove("hidden");
       }
-      console.log("jeden gracz");
       if (!gameResult.classList.contains("hidden")) {
         $(".playAgain-js").addClass("onePlayer");
       }
@@ -67,7 +66,6 @@ socket.on("personAmoutRPS", (receivedPersonAmout) => {
     btnStartGame.classList.add("hidden");
     // nextMove.classList.remove("hidden");
     personAmout = "2";
-    console.log("dwa gracz");
     $(".amountWin-js").addClass("hidden");
 
     if (!$(".startBtnContainer").hasClass("hidden")) {
@@ -84,8 +82,6 @@ socket.on("gameStartRPS", (message) => {
 });
 
 $(".gameAction-js").on("click", function (e) {
-  // console.log(`test`, gameAction.id, gameAction);
-  // console.log(e.currentTarget);
   let type = e.currentTarget.id;
   let gameRoomId = roomId[0];
   let userId = socket.id;
@@ -97,7 +93,6 @@ $(".gameAction-js").on("click", function (e) {
 });
 
 socket.on("gameResult", (data) => {
-  console.log(data[0][0]);
   if (data.length == 1) {
     if (data[0][0] != socket.id) {
       $(".yourOpponentMadeMove-js").removeClass("hidden");
@@ -114,23 +109,18 @@ socket.on("gameResult", (data) => {
     if (P1[0] == socket.id) {
       yourMove = P1;
       opponentMove = P2;
-      // console.log(yourMove[1], opponentMove[1]);
     } else if (P2[0] == socket.id) {
       yourMove = P2;
       opponentMove = P1;
     }
     let yourMoveS = yourMove[1];
     let opponentMoveS = opponentMove[1];
-    // console.log(yourMoveS);
     let yourResult = determineWinner(yourMoveS, opponentMoveS);
-    // console.log(yourResult);
     let yourScore = $("#yourScore")[0].textContent;
     let opponentScore = $("#yourOpponent")[0].textContent;
     if (yourScore == 0 || opponentScore == 0) {
-      // console.log("first match");
       $("#game-status").removeClass("hidden");
     }
-    console.log(yourResult);
     if (yourResult == "1") {
       yourScore++;
       $("#yourScore")[0].textContent = yourScore;
@@ -143,7 +133,6 @@ socket.on("gameResult", (data) => {
       let gameRoomId = roomId[0];
       let userId = socket.id;
 
-      console.log(gameRoomId, userId, "tuuu");
       socket.emit("playerResultGameEndRPS", {
         gameRoomId: gameRoomId,
         userId: userId,
@@ -203,7 +192,6 @@ socket.on("secondPlayerResultRPS", (data) => {
   let gameRoomId = data.gameRoomId;
   let winnerUserId = data.userId;
   let result = data.result;
-  console.log(gameRoomId, winnerUserId, result);
   if (gameResult.classList.contains("hidden")) {
     gameResult.classList.remove("hidden");
   }
@@ -214,10 +202,8 @@ socket.on("secondPlayerResultRPS", (data) => {
 
 $(".playAgain-js").on("click", function (e) {
   if (!$(".playAgain-js").hasClass("onePlayer")) {
-    console.log(!$(".playAgain-js").hasClass("onePlayer"));
     let gameRectangle = $(e.currentTarget).parent().parent();
     gameRectangle.addClass("hidden");
-    console.log(gameRectangle);
     gameResult.classList.add("hidden");
     const userId = socket.id;
     socket.emit("playAgainRPS", {
@@ -225,7 +211,6 @@ $(".playAgain-js").on("click", function (e) {
       userId,
     });
     socket.on("yourOpponentLeftTheGameRPS", (status) => {
-      console.log(status, "status");
       if (status == "yes") {
         if (gameResult.classList.contains("hidden")) {
           $(".yourOpponentLeftTheGame-js").removeClass("hidden");
@@ -243,21 +228,17 @@ $(".playAgain-js").on("click", function (e) {
     $("#yourOpponent")[0].textContent = "0";
     $("#game-status").addClass("hidden");
   }
-  console.log(personAmout);
 });
 
 socket.on("playOnceAgainRPS", (status) => {
-  console.log(status, "status");
   if (status == "yes") {
     $(".waitForYourOpponent-js").addClass("hidden");
-    console.log("playAgain ZJeby");
   }
 
   // Tutaj możesz wykonywać inne działania związane z otrzymanym ID pokoju
 });
 
 $(".changeGame-js").on("click", function (e) {
-  console.log("changeGame", roomId[0]);
   socket.emit("PlayerLeftRoomRPS", roomId[0]);
   window.location.href = "./../choose-game/index.html";
 });

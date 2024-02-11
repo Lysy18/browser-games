@@ -31,9 +31,7 @@ socket.on("bestGame", (data) => {
       let game = data[element].game_name;
       for (let i = 0; i < bestGame.length; i++) {
         gameAttr = bestGame[i].getAttribute("data-game");
-        console.log;
         if (game == gameAttr && (gameAttr != "talk" || gameAttr != "-")) {
-          console.log(game, "game", gameAttr);
           bestGame[i].classList.remove("hidden");
         }
       }

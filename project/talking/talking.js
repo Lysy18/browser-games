@@ -31,7 +31,6 @@ socket.on("messageSent", (data) => {
   }
   liElement.textContent = message;
   pElement.textContent = timeSent;
-  console.log(liElement);
   divElement.appendChild(liElement);
   divElement.appendChild(pElement);
   ulList.appendChild(divElement);
@@ -45,32 +44,21 @@ function przewijDoDolu() {
 // Wywołanie funkcji przewijania
 przewijDoDolu();
 let userId = socket.id;
-console.log(userId, socket.id);
 setTimeout(() => {
   socket.emit("joinChat", userId);
 }, "500");
 
 socket.on("messageHistory", (history) => {
   let userJoinId = history;
-  console.log(history);
   for (let i = 0; i < history[0].length; i++) {
     displayMessage(history[0][i]);
-    console.log(i);
   }
-
-  // history.forEach((data) => {
-  //   console.log(data[1]);
-  //   // Tutaj możesz użyć istniejącej logiki renderowania wiadomości
-  //   // Na przykład:
-  //
-  // });
 });
 
 function displayMessage(data) {
   let message = data[0];
   let idUserSent = data[1];
   let timeSent = data[2];
-  console.log(message, idUserSent, timeSent, data);
   let liElement = document.createElement("li");
   let divElement = document.createElement("div");
   let pElement = document.createElement("p");
@@ -83,7 +71,6 @@ function displayMessage(data) {
   }
   liElement.textContent = message;
   pElement.textContent = timeSent;
-  console.log(liElement);
   divElement.appendChild(liElement);
   divElement.appendChild(pElement);
   ulList.appendChild(divElement);

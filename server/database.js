@@ -14,9 +14,6 @@ async function sprawdzPolaczenie() {
     if (error) {
       throw error;
     }
-
-    console.log("Pobrane dane z bazy danych:", data);
-    console.log("Połączenie z bazą danych jest aktywne.");
   } catch (error) {
     console.error(
       "Błąd podczas pobierania danych z bazy danych:",
@@ -29,18 +26,17 @@ sprawdzPolaczenie();
 
 // Przykład pobierania danych z bazy danych
 supabase
-.from("clients")
-.select("*")
-.then(({ data, error }) => {
-  if (error) {
-    throw error;
-  }
-  socket.emit("clientsData", data);
-  console.log(data, "test");
-})
-.catch((error) => {
-  console.error(
-    "Błąd podczas pobierania danych z bazy danych:",
-    error.message
-  );
-});
+  .from("clients")
+  .select("*")
+  .then(({ data, error }) => {
+    if (error) {
+      throw error;
+    }
+    socket.emit("clientsData", data);
+  })
+  .catch((error) => {
+    console.error(
+      "Błąd podczas pobierania danych z bazy danych:",
+      error.message
+    );
+  });
