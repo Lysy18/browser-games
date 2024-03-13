@@ -302,7 +302,7 @@ socket.on("setPercentSLOWKA", (data) => {
   lastUserMoveSlowka = userId;
 });
 
-// lysy obsługa po grze
+// BT obsługa po grze
 
 socket.on("secondPlayerResultSLOWKA", (data) => {
   $(".result-js").addClass("hidden");

@@ -1,220 +1,220 @@
-:root{
-    --color0:#f3f9f8;
-    --color1:#e7edec;
-    --color2:#939f9f;
-    --color3:#666e70;
-    --color4:#454a4c;
-    --color5:#322f31;
-    --colorBTN:#007bff;
-  }
+:root {
+  --color0: #f3f9f8;
+  --color1: #e7edec;
+  --color2: #939f9f;
+  --color3: #666e70;
+  --color4: #454a4c;
+  --color5: #322f31;
+  --colorBTN: #007bff;
+}
 //   font-family: 'Oswald', sans-serif;
 // font-family: 'Raleway', sans-serif;
 // font-family: 'Roboto', sans-serif;
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: var(--color0);
-    font-family: 'Roboto', sans-serif;
-
-  }
-.hidden{
-    display: none !important;
-    visibility: hidden !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: var(--color0);
+  font-family: "Roboto", sans-serif;
+}
+.hidden {
+  display: none !important;
+  visibility: hidden !important;
 }
 
-  .pageContainer{
-   
-    display: flex;
-    // flex-direction: column;
-    .nextMove{
+.pageContainer {
+  display: flex;
+  // flex-direction: column;
+  .nextMove {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    p {
+      margin: 0;
+      font-size: 14px;
+    }
+  }
+  .startBtnContainer {
+    &-startBtn {
+      width: 200px;
+      height: 160px;
+    }
+  }
+  .pageBlocker {
+    width: 100%;
+    height: 100vh;
+    opacity: 0.7;
+    background-color: rgb(24, 23, 23);
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    &-waitingRoom {
+      color: rgb(252, 250, 250);
       position: absolute;
-      top: 10px;
-      left: 15px;
-      p{
-        margin: 0;
-        font-size: 14px;
-      }
+      transform: translate(-50%, -50%);
+      top: 50%;
+      left: 50%;
     }
-    .startBtnContainer{
-      &-startBtn{
-        width: 200px;
-        height: 160px;
-      }
-    }
-    .pageBlocker{
+  }
+  .yourOpponentLeftTheGame,
+  .waitForYourOpponent {
+    p {
+      font-size: 24px;
+      color: rgb(252, 250, 250);
+      position: absolute;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      top: 50%;
+      left: 50%;
       width: 100%;
-      height: 100vh;
-      opacity: 0.7;
-      background-color: rgb(24, 23, 23);
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      &-waitingRoom{
-        color: rgb(252, 250, 250);
-        position: absolute;
-        transform: translate(-50%,-50%);
-        top: 50%;
-        left: 50%;
-      }
     }
-    .yourOpponentLeftTheGame, .waitForYourOpponent{
-      p{
-         font-size: 24px;
-        color: rgb(252, 250, 250);
-        position: absolute;
-        transform: translate(-50%,-50%);
-        text-align: center;
-        top: 50%;
-        left: 50%;
-        width: 100%;
-      }
+  }
+  .game-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    .chooseWordForYourOpponent-container-wordDiv-paragraphWord {
+      text-transform: capitalize;
     }
-    .game-container{
+    .chooseCategoryForYourOpponent,
+    .chooseWordForYourOpponent {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      background-color: var(--color1);
+      border-radius: 8px;
+      p {
+        margin: 10px 0;
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      .chooseCategoryForYourOpponent-container,
+      .chooseWordForYourOpponent-container {
         display: flex;
-        align-items: center;
         justify-content: center;
-        padding: 20px;
-        .chooseWordForYourOpponent-container-wordDiv-paragraphWord{
-          text-transform: capitalize;
+        gap: 20px;
+
+        .chooseCategoryForYourOpponent-container-categoryDiv,
+        .chooseWordForYourOpponent-container-wordDiv {
+          padding: 10px 20px;
+          background-color: #fff;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          cursor: pointer;
+
+          &:hover {
+            background-color: #e9e9e9;
+          }
+
+          p {
+            margin: 0;
+            color: #333;
+            text-align: center;
+          }
         }
-        .chooseCategoryForYourOpponent, .chooseWordForYourOpponent {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            background-color: var(--color1);
-            border-radius: 8px;
-            p {
-              margin: 10px 0;
-              font-size: 16px;
-              font-weight: bold;
-            }
-          
-            .chooseCategoryForYourOpponent-container,.chooseWordForYourOpponent-container {
-              display: flex;
-              justify-content: center;
-              gap: 20px;
-          
-              .chooseCategoryForYourOpponent-container-categoryDiv,.chooseWordForYourOpponent-container-wordDiv {
-                padding: 10px 20px;
-                background-color: #fff;
-                border: 1px solid #ddd;
-                border-radius: 4px;
-                cursor: pointer;
-          
-                &:hover {
-                  background-color: #e9e9e9;
-                }
-          
-                p {
-                  margin: 0;
-                  color: #333;
-                  text-align: center;
-                }
-              }
-            }
-          }
-          .game-container-StartGame {
-            display: block; // Aby upewnić się, że kontener gry jest widoczny
-            margin: auto; // Centralne umiejscowienie kontenera gry
-            .yourOpponentStatus{
-              font-size: 14px;
-              position: absolute;
-              top: 10px;
-              right: 15px;
-            }
-            .game-container-StartGame-category {
-              text-align: center; // Wyśrodkowanie tekstu w kategorii gry
-              p {
-                // Stylizacja dla paragrafu wewnątrz kategorii
-              }
-            }
-          
-            .game-container-StartGame-container {
-              .game-container-StartGame-container-letter {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                flex-basis: 30px;
-                .game-container-StartGame-container-letters{
-                  // display: flex;
-                  flex-direction: column;
-                  // flex-direction: row;
-                  &-lettersConatainer{
-                    // float: left;
-                    // width: 100%;
-                    display: flex;
-
-                    
-                    &-letter {
-                      background-color: white; 
-                      margin: 5px;
-                      width: 50px;
-                      height: 50px;
-                      border-radius: 15px;
-                      p{
-                        text-align: center;
-                        font-size: 24px;
-                        line-height: 50px;
-                        margin: 0 auto;
-                        text-transform: uppercase;
-                      }
-                    }
-                    
-                  }
-                }
-              }
-          
-              .game-container-StartGame-container-area {
-                margin-top: 10px;
-                display: flex;
-                justify-content: center; // Wyśrodkowanie pola tekstowego
-                gap: 5px;
-
-                &-input {
-                    width: 200px;
-
-                    border-radius: 5px;
-                    border: 1px solid black;
-                    border: none;
-                    box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 1);
-                    height: 34px;
-                  // Stylizacje dla pola tekstowego
-                  transition: 0.3s;
-                  &:focus {
-                    background-color: #e0e0e0; /* Zmiana koloru tła na aktywny */
-                    border: 2px solid var(--colorBTN); 
-                    // color: #695b5b; /* Zmiana koloru tekstu */
-                    outline: none; /* Usunięcie domyślnego obramowania fokusu (opcjonalne) */
-                    height: 32px;
-                }
-                }
-                &-button{
-                    transition: 0.3s;
-                    padding: 10px 15px;
-                    background-color: var(--colorBTN);
-                    color: #fff;
-                    border: none;
-                    border-radius: 4px;
-                    cursor: pointer;
-              
-                    &:hover {
-                      background-color: #0056b3;
-                    }
-                }
-              }
-            }
-          }
+      }
     }
-  //pop up end game lysy
-  &-gameResult{
-    .onePlayer{
+    .game-container-StartGame {
+      display: block; // Aby upewnić się, że kontener gry jest widoczny
+      margin: auto; // Centralne umiejscowienie kontenera gry
+      .yourOpponentStatus {
+        font-size: 14px;
+        position: absolute;
+        top: 10px;
+        right: 15px;
+      }
+      .game-container-StartGame-category {
+        text-align: center; // Wyśrodkowanie tekstu w kategorii gry
+        p {
+          // Stylizacja dla paragrafu wewnątrz kategorii
+        }
+      }
+
+      .game-container-StartGame-container {
+        .game-container-StartGame-container-letter {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          flex-basis: 30px;
+          .game-container-StartGame-container-letters {
+            // display: flex;
+            flex-direction: column;
+            // flex-direction: row;
+            &-lettersConatainer {
+              // float: left;
+              // width: 100%;
+              display: flex;
+
+              &-letter {
+                background-color: white;
+                margin: 5px;
+                width: 50px;
+                height: 50px;
+                border-radius: 15px;
+                p {
+                  text-align: center;
+                  font-size: 24px;
+                  line-height: 50px;
+                  margin: 0 auto;
+                  text-transform: uppercase;
+                }
+              }
+            }
+          }
+        }
+
+        .game-container-StartGame-container-area {
+          margin-top: 10px;
+          display: flex;
+          justify-content: center; // Wyśrodkowanie pola tekstowego
+          gap: 5px;
+
+          &-input {
+            width: 200px;
+
+            border-radius: 5px;
+            border: 1px solid black;
+            border: none;
+            box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 1);
+            height: 34px;
+            // Stylizacje dla pola tekstowego
+            transition: 0.3s;
+            &:focus {
+              background-color: #e0e0e0; /* Zmiana koloru tła na aktywny */
+              border: 2px solid var(--colorBTN);
+              // color: #695b5b; /* Zmiana koloru tekstu */
+              outline: none; /* Usunięcie domyślnego obramowania fokusu (opcjonalne) */
+              height: 32px;
+            }
+          }
+          &-button {
+            transition: 0.3s;
+            padding: 10px 15px;
+            background-color: var(--colorBTN);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+
+            &:hover {
+              background-color: #0056b3;
+            }
+          }
+        }
+      }
+    }
+  }
+  //pop up end game BT
+  &-gameResult {
+    .onePlayer {
       text-decoration: line-through;
       color: #6f6363;
     }
@@ -224,33 +224,35 @@ body {
     right: 0;
     bottom: 0;
     background-color: rgba(44, 40, 40, 0.8);
-    &-Won{}
-    &-Lose{
-      p{
+    &-Won {
+    }
+    &-Lose {
+      p {
         font-size: 34px;
         letter-spacing: 1.4px;
         position: absolute;
         top: 10%;
         left: 50%;
-        transform: translate(-50%,-50%);
+        transform: translate(-50%, -50%);
       }
-      &-imgContainer img{
+      &-imgContainer img {
         max-width: 300px;
         height: auto;
       }
     }
-    &-Draw{
+    &-Draw {
       height: 300px !important;
-
     }
-    &--Draw-imgContainer{
+    &--Draw-imgContainer {
       margin: 35px 0 40px;
     }
-    &-Won,&-Lose,&-Draw{
+    &-Won,
+    &-Lose,
+    &-Draw {
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%,-50%);
+      transform: translate(-50%, -50%);
       border-radius: 15px;
       padding: 15px;
       width: 600px;
@@ -260,17 +262,16 @@ body {
       flex-direction: column;
       align-items: center;
       &-imgContainer {
-        
-        & img{
-        height: 340px;
+        & img {
+          height: 340px;
         }
       }
-      &-btnContainer{
+      &-btnContainer {
         padding: 15px 10px;
         display: flex;
         justify-content: space-between;
-        width:95%;
-         &-btn{
+        width: 95%;
+        &-btn {
           font-size: 20px;
           width: 165px;
           height: 66px;
@@ -280,12 +281,11 @@ body {
           border: none;
           border-bottom: 2px solid rgb(99, 86, 86);
           z-index: 100;
-            &:hover {
-              font-size: 22px;
-            }
-         }
+          &:hover {
+            font-size: 22px;
+          }
+        }
       }
     }
   }
-  
 }
